@@ -1,0 +1,13 @@
+export const img_car = require('./img_car.png');
+export const img_bg_auth = require('./img_bg_auth.png');
+export const img_car_2 = require('./img_car_2.png');
+export const img_mall = require('./img_mall.png');
+export const img_beach = require('./img_beach.png');
+export const img_coming_soon = require('./img_coming_soon.png');
+export const img_register_bg = require('./img_register_bg.png');
+export const img_dash = require('./img_dash.png');
+export const img_boy = require('./img_boy.png');
+export const img_barber = require('./img_barber.png');
+export const img_gell = require('./img_gell.png');
+export const img_hair = require('./img_hair.png');
+export const ic_beard = require('./ic_beard.png');
