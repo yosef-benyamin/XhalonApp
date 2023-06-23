@@ -2414,6 +2414,7 @@ __metadata:
     react-native-device-info: ^10.6.0
     react-native-dotenv: ^3.4.7
     react-native-gesture-handler: ^2.9.0
+    react-native-get-location: ^3.0.1
     react-native-image-picker: ^5.0.1
     react-native-modern-datepicker: ^1.0.0-beta.91
     react-native-otp-inputs: ^7.4.0
@@ -8533,6 +8534,15 @@ __metadata:
     react: "*"
     react-native: "*"
   checksum: 6bfdd9d23486193424dcfb0073dd821a216c2783dde746d73a3441e920602343f09efa10261c6f09fcbcb645d029a95305c86f61997053c01ad89751c8c6d236
+  languageName: node
+  linkType: hard
+
+"react-native-get-location@npm:^3.0.1":
+  version: 3.0.1
+  resolution: "react-native-get-location@npm:3.0.1"
+  peerDependencies:
+    react-native: ">=0.60"
+  checksum: 24191ff103240d864723719a8e768e6b197283e1de95f2a3d6bad4ebd0547e898a03142c342d222120da8fb5848e03721967098f6d6fb4f0d7090a7251e76698
   languageName: node
   linkType: hard
 

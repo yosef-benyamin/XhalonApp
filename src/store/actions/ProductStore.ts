@@ -11,22 +11,32 @@ const initData = {
     "FILTER_VALUE": "",
     "PAGE_NO": "1",
     "PAGE_ROW": "20",
-    "SORT_ORDER_BY": "COMPANY_ID",
+    "SORT_ORDER_BY": "ANALISA_ID",
     "SORT_ORDER_TYPE": "DESC",
     "COMPANY_ID": "ALL"
 }
 
+const initDataStore = {
+    "FILTER_COLOUMN": "",
+    "FILTER_FIELD": "",
+    "FILTER_VALUE": "",
+    "PAGE_NO": "1",
+    "PAGE_ROW": "1000",
+    "SORT_ORDER_BY": "COMPANY_ID",
+    "SORT_ORDER_TYPE": "DESC",
+    "COMPANY_ID": "ALL"
+}
 const useProductStore = create<ProductState>((set: SetState<ProductState>) => ({
     store: [],
     groupCategory: [],
     category: [],
     product: [],
-    getStore: async (data = initData) => {
+    getStore: async (data = initDataStore) => {
         try {
 
             // const state: AuthState = useAuthStore.getState()
             const basic = await basicData()
-            
+
             const response: any = await apiWithInterceptor({
                 method: 'post',
                 url: '/SALES/m_store',
@@ -38,7 +48,7 @@ const useProductStore = create<ProductState>((set: SetState<ProductState>) => ({
                     }
                 },
             });
-            // console.log('response.data.rs?.store = ',response.data)
+            console.log('response.data.rs?.store = ', response.data)
             if (response.status === 200 && response.data?.rs?.RESULT_CODE === '01') {
                 set(() => ({
                     store: response.data.rs?.DATA
@@ -74,7 +84,7 @@ const useProductStore = create<ProductState>((set: SetState<ProductState>) => ({
             // console.log('response.data.rs?.DATA = ', response.data.rs)
             if (response.status === 200 && response.data?.rs?.RESULT_CODE === '01') {
                 set(() => ({
-                   groupCategory: response.data.rs?.DATA
+                    groupCategory: response.data.rs?.DATA
                 }));
             } else {
                 // set(() => ({
@@ -89,6 +99,8 @@ const useProductStore = create<ProductState>((set: SetState<ProductState>) => ({
         try {
 
             const state: AuthState = useAuthStore.getState()
+            const basic = await basicData()
+            console.log('basic = ', basic)
 
             const response: any = await apiWithInterceptor({
                 method: 'post',
@@ -96,15 +108,15 @@ const useProductStore = create<ProductState>((set: SetState<ProductState>) => ({
                 data: {
                     "rq": {
                         ACTION_ID: "LIST_H",
-                        USER_ID: state.user?.USER_ID,
-                        SESSION_LOGIN_ID: state.user?.SESSION_LOGIN_INFO[0].SESSION_LOGIN_ID,
-                        ...data
+                        ...data,
+                        ...basic,
                     }
                 },
             });
+            console.log('getCategory = ', response.data)
             if (response.status === 200 && response.data?.rs?.RESULT_CODE === '01') {
                 set(() => ({
-                   category: response.data.rs?.DATA
+                    category: response.data.rs?.DATA
                 }));
             } else {
                 // set(() => ({
@@ -134,7 +146,7 @@ const useProductStore = create<ProductState>((set: SetState<ProductState>) => ({
             // console.log('response product = ', response.data.rs)
             if (response.status === 200 && response.data?.rs?.RESULT_CODE === '01') {
                 set(() => ({
-                   product: response.data.rs?.DATA
+                    product: response.data.rs?.DATA
                 }));
             } else {
                 // set(() => ({
@@ -145,8 +157,28 @@ const useProductStore = create<ProductState>((set: SetState<ProductState>) => ({
             console.log('error:', error);
         }
     },
+    filterProduct: (str: string = '') => {
+        console.log('str = ', str);
+        const _product: any = useProductStore.getState().product;
+        console.log('filtering =- ', sortArrayOfObjectsByProperty(_product, 'ANALISA_ID_GLOBAL', str))
+        set(() => ({
+            product: sortArrayOfObjectsByProperty(_product, 'ANALISA_ID_GLOBAL', str),
+        }));
+        return 'a';
+    }
 }));
 
 export {
     useProductStore
+}
+function sortArrayOfObjectsByProperty(arr, property, priorityValue) {
+    const sortedArray = arr.sort((a, b) => {
+        if (a[property] === priorityValue) return -1;
+        if (b[property] === priorityValue) return 1;
+        if (a[property] < b[property]) return -1;
+        if (a[property] > b[property]) return 1;
+        return 0;
+    });
+
+    return sortedArray;
 }

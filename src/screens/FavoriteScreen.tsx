@@ -1,17 +1,19 @@
 import {
   Image,
   ListRenderItem,
+  RefreshControl,
   StyleSheet,
   Text,
   TouchableOpacity,
   View,
 } from 'react-native';
-import React, {useCallback, useEffect} from 'react';
+import React, {useCallback, useEffect, useState} from 'react';
 import {useNavigation} from '@react-navigation/native';
 import {
   ic_arrow_left_black,
   ic_chat,
   ic_crown,
+  ic_heart,
   ic_love,
   ic_pinpoin,
   ic_stars,
@@ -24,9 +26,33 @@ import {theme} from 'utils';
 import {img_barber} from 'assets/images';
 import {currencyFormat} from 'utils/currencyFormat';
 import Button from 'components/Button';
+import {useFavoriteStore} from 'store/actions/favoritStore';
+import {deleteFavorit} from 'store/effects/favoritStore';
 
 const FavoriteScreen = () => {
   const navigation = useNavigation();
+  const favoriteStore = useFavoriteStore(state => state);
+  const [loader, setLoader] = useState(false);
+  useEffect(() => {
+    getFav();
+    return () => {};
+  }, []);
+
+  const getFav=async()=> {
+    setLoader(true)
+    favoriteStore.getFavorite();
+    setLoader(false)
+  }
+
+  const handleDeleteFav = async (id: any) => {
+    let _ = [];
+    _.push({
+      PART_ID: id,
+    });
+
+    let res = await deleteFavorit(_);
+    getFav();
+  };
 
   useEffect(() => {
     navigation.setOptions(
@@ -53,7 +79,7 @@ const FavoriteScreen = () => {
   }, [navigation]);
 
   const renderItem: ListRenderItem<any> = useCallback(
-    item => (
+    (item: any) => (
       <TouchableOpacity
         style={{
           elevation: 5,
@@ -64,28 +90,37 @@ const FavoriteScreen = () => {
         <View
           style={[
             // rowCenter,
-            {justifyContent: 'space-between', alignItems: 'center'},
+            // {justifyContent: 'space-between', alignItems: 'center'},
           ]}>
-          <View style={{alignItems: 'center', padding: 10}}>
-            <Text style={[h2]}>Catok</Text>
+          <View style={{alignItems: 'flex-start', padding: 10}}>
+            <Text style={[h2]}>{item?.PART_NAME}</Text>
 
-            <Image
+            {/* <Image
               source={ic_stars}
               style={{width: 50, height: 10}}
               resizeMode={'contain'}
             />
 
-            <Text style={[h4, {fontSize: 12}]}>{currencyFormat(40000)}</Text>
-            <View style={{width: WINDOW_WIDTH/4}}>
+            <Text style={[h4, {fontSize: 12}]}>{currencyFormat(40000)}</Text> */}
+            <View
+              style={{
+                width: WINDOW_WIDTH / 4,
+                marginTop: 20,
+                alignSelf: 'flex-start',
+              }}>
               <Button _theme="pink" title="Kunjungi" onPress={() => {}} />
             </View>
           </View>
 
-          <Image
-            source={ic_love}
-            style={[iconSize, {position: 'absolute', bottom: 10, right: 10}]}
-            resizeMode={'contain'}
-          />
+          <TouchableOpacity
+            onPress={() => handleDeleteFav(item?.PART_ID)}
+            style={{position: 'absolute', bottom: 10, right: 10}}>
+            <Image
+              source={ic_heart}
+              style={[iconSize]}
+              resizeMode={'contain'}
+            />
+          </TouchableOpacity>
         </View>
       </TouchableOpacity>
     ),
@@ -93,18 +128,21 @@ const FavoriteScreen = () => {
   );
 
   return (
-    <View style={{flex: 1}}>
+    <View style={{flex: 1, margin: 20}}>
       <GridFlatList
-        data={[...Array(10).fill(0)]}
+        data={[...(favoriteStore?.listFavorite || [])]}
         // data={[]}
         renderItem={renderItem}
         keyExtractor={(_item, index) => `${index}`}
+        refreshControl={
+          <RefreshControl refreshing={loader} onRefresh={()=> favoriteStore.getFavorite()} />
+        }
         numColumns={2}
         style={{
           backgroundColor: theme.colors.cloud,
           width: '100%',
           alignSelf: 'center',
-          margin: 16
+          margin: 16,
         }}
         ListFooterComponent={() => <View style={{marginBottom: 170}} />}
         ListEmptyComponent={() => (

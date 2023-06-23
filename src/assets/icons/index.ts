@@ -54,3 +54,5 @@ export const ic_star_active = require('./ic_star_active.png');
 export const ic_filter = require('./ic_filter.png');
 export const ic_grid = require('./ic_grid.png');
 export const ic_love = require('./ic_love.png');
+export const ic_heart = require('./ic_heart.png');
+export const ic_heart_line = require('./ic_heart_line.png');

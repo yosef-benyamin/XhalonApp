@@ -34,6 +34,7 @@ import {currencyFormat} from 'utils/currencyFormat';
 import Button from 'components/Button';
 import {useProductStore} from 'store/actions/ProductStore';
 import {IStore} from 'types/products.types';
+import HeaderCarousel from './HeaderCarousel';
 
 const HomeScreen = () => {
   const navigation = useNavigation();
@@ -48,10 +49,10 @@ const HomeScreen = () => {
 
   const renderItem: ListRenderItem<any> = useCallback(
     ({item}: {item: IStore}) => (
-      <TouchableOpacity style={[rowCenter, {justifyContent: 'center'}]}>
+      <View style={[rowCenter, {justifyContent: 'center', padding: 10}]}>
         <Image
           source={img_barber}
-          style={{width: 180, height: 150, borderRadius: 10, margin: 10}}
+          style={{width: 150, height: 160, borderRadius: 10, marginRight: 10}}
           resizeMode={'cover'}
         />
 
@@ -66,9 +67,9 @@ const HomeScreen = () => {
             resizeMode={'contain'}
           />
 
-          <Button _theme="pink" title="Kunjungi" onPress={() => {}} />
+          <Button _theme="pink" title="Kunjungi" onPress={() => {navigation.navigate('SalonDetail', {dataStore: item})}} />
         </View>
-      </TouchableOpacity>
+      </View>
     ),
     [],
   );
@@ -80,65 +81,19 @@ const HomeScreen = () => {
         backgroundColor: '#ffffff',
       }}>
       <ScrollView nestedScrollEnabled>
-        {
-          //*start of header section
-        }
-        <MainHeader />
-        {
-          //*end of header section
-        }
-
-        <View style={{marginTop: -30}}>
-          <Carousel
-            loop
-            width={WINDOW_WIDTH}
-            height={WINDOW_WIDTH / 2}
-            autoPlay={true}
-            data={[...new Array(6).keys()]}
-            scrollAnimationDuration={1000}
-            // onSnapToItem={index => console.log('current index:', index)}
-            renderItem={({index}) => (
-              <View
-                style={[
-                  rowCenter,
-                  styles.sliderImgWrapper,
-                  {marginHorizontal: 10},
-                ]}>
-                <View style={{padding: 20, width: '60%'}}>
-                  <Text style={[h1, {color: '#fff'}]}>
-                    Collection hair & beard
-                  </Text>
-                  <Text style={[h5, {color: '#fff'}]}>
-                    here are many variations of passages of Lorem Ipsum
-                    available
-                  </Text>
-                  <View style={styles.boxService}>
-                    <Text style={[h1, {color: '#fff'}]}>See All services</Text>
-                  </View>
-                </View>
-                <Image
-                  source={img_boy}
-                  style={{
-                    width: 100,
-                    height: 120,
-                  }}
-                />
-              </View>
-            )}
-          />
-        </View>
+      <HeaderCarousel/>
 
         <Text style={[h1, {fontSize: 20, margin: 16}]}>Daftar Salon</Text>
 
         <FlatList
-          data={[...ProductStore?.store]}
+          data={[...ProductStore?.store || []]}
           // data={[]}
           renderItem={renderItem}
           keyExtractor={(_item, index) => `${index}`}
           style={{
-            backgroundColor: theme.colors.cloud,
-            width: '100%',
-            alignSelf: 'center',
+            // backgroundColor: theme.colors.cloud,
+            // width: '100%',
+            // alignSelf: 'center',
           }}
           ListFooterComponent={() => <View style={{marginBottom: 170}} />}
           ListEmptyComponent={() => (
@@ -200,7 +155,7 @@ const styles = StyleSheet.create({
     marginRight: 20,
   },
   descWrapper: {
-    margin: 16,
+    // margin: 16,
     elevation: 5,
     backgroundColor: '#fff',
     alignItems: 'center',

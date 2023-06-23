@@ -1,5 +1,7 @@
 import {
+  Alert,
   Image,
+  PermissionsAndroid,
   ScrollView,
   StyleSheet,
   Text,
@@ -19,7 +21,7 @@ import {h1, h2, h3, h5} from 'utils/styles';
 
 import Button from 'components/Button';
 // import OtpInputs from 'react-native-otp-inputs';
-import {useNavigation} from '@react-navigation/native';
+import {RouteProp, useNavigation, useRoute} from '@react-navigation/native';
 import OtpInputs from 'react-native-otp-inputs';
 // import DatePicker from 'react-native-modern-datepicker';
 import ReactNativeModernDatepicker, {
@@ -31,11 +33,75 @@ import {Picker} from '@react-native-picker/picker';
 import appBar from 'components/AppBar/AppBar';
 import {img_barber} from 'assets/images';
 import CustomTextInput from 'components/TextInput';
+import {CartState} from 'types/cart.types';
+import {useCartStore} from 'store/actions/cartStore';
+import {RootStackParamList} from 'types/navigator';
+import GetLocation from 'react-native-get-location';
+import Loading from 'components/Loading';
 
-const OtpVerificationScreen = () => {
+type FormBookingOrderRouteProp = RouteProp<
+  RootStackParamList,
+  'FormBookingOrder'
+>;
+
+const FormBookingOrderScreen = () => {
   const navigation = useNavigation();
-  const [modalVisible, setModalVisible] = useState(false);
-  const [selectedBtn, setSelectedBtn] = useState(0);
+  const route = useRoute<FormBookingOrderRouteProp>();
+
+  const [loader, setLoader] = useState(false);
+  const cartStore: CartState = useCartStore();
+
+  const [form, setForm] = useState({
+    name: '',
+    address: '',
+    kelurahan: '',
+    kecamatan: '',
+    kota: '',
+    kode_pos: '',
+  });
+
+  const [location, setLocation] = useState({
+    latitude: '',
+    longitude: '',
+  });
+
+  useEffect(() => {
+    getLocation();
+    return () => {};
+  }, [navigation]);
+
+  const getLocation = async () => {
+    const granted = await PermissionsAndroid.request(
+      PermissionsAndroid.PERMISSIONS.ACCESS_FINE_LOCATION,
+      {
+        title: 'App Location Permission',
+        message: 'App needs access to your location ',
+        buttonNeutral: 'Ask Me Later',
+        buttonNegative: 'Cancel',
+        buttonPositive: 'OK',
+      },
+    );
+
+    if (granted === PermissionsAndroid.RESULTS.GRANTED) {
+      GetLocation.getCurrentPosition({
+        enableHighAccuracy: true,
+        timeout: 60000,
+      })
+        .then(location => {
+          console.log(location);
+          setLocation({
+            latitude: location.latitude.toString(),
+            longitude: location.longitude.toString(),
+          });
+        })
+        .catch(error => {
+          const {code, message} = error;
+          console.warn(code, message);
+        });
+      return;
+    }
+  };
+
   useEffect(() => {
     navigation.setOptions(
       appBar({
@@ -60,6 +126,45 @@ const OtpVerificationScreen = () => {
     );
   }, [navigation]);
 
+  const handleAdd = async () => {
+    let status = true;
+    Object.keys(form).map((x, i) => {
+      if (!form[x]) {
+        status = false;
+      }
+    });
+    if (!status) {
+      Alert.alert('PERINGATAN', 'Silahkan isi semua form');
+      return;
+    }
+    const data = {
+      COMPANY_ID: cartStore.cart.COMPANY_ID,
+      BOOKING_DATE: route.params?.BOOKING_DATE,
+      BOOKING_TYPE: route.params?.BOOKING_TYPE,
+      VOUCHER_CODE: '',
+      DELIVERYCOST_VAL: '0',
+      ORDER_ADDRESS: form?.address,
+      ORDER_KELURAHAN_ID: form.kelurahan,
+      ORDER_POINT: location.latitude + ',' + location.longitude,
+      ORDER_DISTANCE: '12',
+      NOTE: '',
+      ITEMS: [...cartStore.cart?.ITEMS?.filter(x=> x?.IS_SELECTED)!],
+    };
+    setLoader(true)
+    let res: any = await cartStore.addOrder(data);
+    setLoader(false)
+    console.log('res = ', res)
+    if (res === 200) {
+      navigation.navigate('Checkout');
+    }
+    // console.log('data = ', data);
+  };
+
+  if(loader) {
+    return (
+      <Loading/>
+    )
+  }
   return (
     <View style={{flex: 1, padding: 10}}>
       <ScrollView>
@@ -72,60 +177,75 @@ const OtpVerificationScreen = () => {
           title="Nama Lengkap"
           placeholder="Nama Lengkap"
           errorMessage=""
-          onChangeText={() => {}}
-          value={''}
+          onChangeText={v => {
+            setForm({...form, name: v});
+          }}
+          value={form.name}
         />
         <View style={{marginBottom: 10}} />
         <CustomTextInput
           title="Alamat"
           placeholder="Alamat"
           errorMessage=""
-          onChangeText={() => {}}
-          value={''}
+          onChangeText={v => {
+            setForm({...form, address: v});
+          }}
+          value={form.address}
         />
         <View style={{marginBottom: 10}} />
         <CustomTextInput
           title="Kelurahan"
           placeholder="Kelurahan"
           errorMessage=""
-          onChangeText={() => {}}
-          value={''}
+          onChangeText={v => {
+            setForm({...form, kelurahan: v});
+          }}
+          value={form.kelurahan}
         />
         <View style={{marginBottom: 10}} />
         <CustomTextInput
           title="Kecamatan"
           placeholder="Kecamatan"
           errorMessage=""
-          onChangeText={() => {}}
-          value={''}
+          onChangeText={v => {
+            setForm({...form, kecamatan: v});
+          }}
+          value={form.kecamatan}
         />
         <View style={{marginBottom: 10}} />
         <CustomTextInput
           title="Kota"
           placeholder="Kota"
           errorMessage=""
-          onChangeText={() => {}}
-          value={''}
+          onChangeText={v => {
+            setForm({...form, kota: v});
+          }}
+          value={form.kota}
         />
         <View style={{marginBottom: 10}} />
         <CustomTextInput
           title="Kode Pos"
           placeholder="Kode Pos"
+          keyboardType='numeric'
           errorMessage=""
-          onChangeText={() => {}}
-          value={''}
+          onChangeText={v => {
+            setForm({...form, kode_pos: v});
+          }}
+          value={form.kode_pos}
         />
+
         <View style={{marginBottom: 10}} />
 
         <View style={[rowCenter, {alignSelf: 'flex-end'}]}>
-          <Text>Simpan alamat ini{' '}</Text>
+          <Text>Simpan alamat ini </Text>
           <Image source={ic_check} style={iconSize} />
         </View>
 
         <Button
           _theme="pink"
+          disabled={(!form.name || !form.address || !form.kelurahan || !form.kecamatan || !form.kota || !form.kode_pos)}
           title="Lanjutkan"
-          onPress={() => {navigation.navigate('Checkout')}}
+          onPress={handleAdd}
           styleWrapper={{
             marginTop: 20,
           }}
@@ -135,7 +255,7 @@ const OtpVerificationScreen = () => {
   );
 };
 
-export default OtpVerificationScreen;
+export default FormBookingOrderScreen;
 
 const styles = StyleSheet.create({
   boxText: {paddingHorizontal: 10, paddingVertical: 5, backgroundColor: '#fff'},

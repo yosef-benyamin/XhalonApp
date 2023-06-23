@@ -29,6 +29,7 @@ import {WINDOW_HEIGHT, drawer_width} from 'utils/mixins';
 import {useAuthStore} from 'store/actions/AuthStore';
 import {AuthState} from 'types/auth.types';
 import { RootStackParamList } from 'types/navigator';
+import ProductDetailScreen from 'screens/SalonDetailScreen/ProductDetail';
 
 const RootStack = createStackNavigator<RootStackParamList>();
 
@@ -95,6 +96,10 @@ const MainStack: React.FC = () => {
                 <RootStack.Screen
                   name="SalonDetail"
                   component={SalonDetailScreen}
+                />
+                <RootStack.Screen
+                  name="ProductDetail"
+                  component={ProductDetailScreen}
                 />
                 <RootStack.Screen name="MainTab" component={MainTab} />
                 <RootStack.Screen name="CartList" component={CartListScreen} />

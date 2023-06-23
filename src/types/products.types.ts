@@ -8,6 +8,7 @@ export interface ProductState {
     getGroupCategory: (data?: IDataStore) => Promise<void>;
     getCategory: (data?: IDataStore) => Promise<void>;
     getProduct: (data?: IDataStore) => Promise<void>;
+    filterProduct: (str?: string) => any;
 }
 
 export interface IDataStore {
@@ -54,6 +55,7 @@ export interface IGroupCategory {
 }
 
 export interface ICategory {
+    ANALISA_ID_GLOBAL: string;
     TOTAL_PAGE: number;
     TOTAL_RECORD: number;
     ROW_NUMBER: number;
@@ -63,7 +65,7 @@ export interface ICategory {
     GROUP_ANALISA_ID: string;
     IS_ACTIVE: boolean;
     IS_STORE: boolean;
-    THUMB_IMAGE: boolean;
+    THUMB_IMAGE: string;
     SORT_ORDER: number;
 }
 
@@ -90,4 +92,20 @@ export interface IProduct {
     IS_FREE: boolean;
     IS_STOCK: boolean;
     IS_FIX_QTY: boolean;
+}
+
+export interface Banners {
+    TOTAL_PAGE: number;
+    TOTAL_RECORD: number;
+    ROW_NUMBER: number;
+    BANNER_ID: string;
+    BANNER_NAME: string;
+    BANNER_DESCRIPTION: string;
+    BANNER_ACTION_TO: string;
+    BANNER_ACTION_ID: string;
+    ACTIVE_DATE: string;
+    ACTIVE_UNTIL_DATE: string;
+    BANNER_IMAGE: string;
+    SORT_ORDER: null;
+
 }

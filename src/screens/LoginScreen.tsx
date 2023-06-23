@@ -28,8 +28,8 @@ const LoginScreen = () => {
   const [loader, setLoader] = useState(false);
 
   const [form, setForm] = useState({
-    phone: '',
-    password: '',
+    phone: '085641231746',
+    password: 'MAKINMUDAH',
     code: '',
   });
   const [selected, setSelected] = useState(countryCodes[0]);

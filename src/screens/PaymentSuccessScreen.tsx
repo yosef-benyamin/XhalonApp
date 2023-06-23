@@ -10,7 +10,7 @@ const PaymentSuccessScreen = () => {
   const navigation = useNavigation();
   return (
     <View style={{flex: 1, alignItems: 'center', justifyContent: 'center'}}>
-      <Text style={[h1, {}]}>Pembayaran Telah Berhasil</Text>
+      <Text style={[h1, {}]}>Pembayaran Telah Berhasil di Proses</Text>
       <Text style={[h1, {fontSize: 20}]}>Terima Kasih</Text>
       <Text style={[h1, {}]}>{currencyFormat(50000)}</Text>
       <Text style={[h1, {}]}>No. Pesanan Anda</Text>

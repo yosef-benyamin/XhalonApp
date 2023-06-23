@@ -91,7 +91,7 @@ const SalonDetailScreen = () => {
               <Text style={[h1]}> {dataStore?.COMPANY_NAME}</Text>
             </View>
             <View style={[rowCenter, {marginVertical: 7}]}>
-              <Text style={[h2, {color: 'green'}]}>• Online</Text>
+              {/* <Text style={[h2, {color: 'green'}]}>• Online</Text> */}
               <Text style={{marginLeft: 20}}>{dataStore?.KOTA_NAME}</Text>
             </View>
 

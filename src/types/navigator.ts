@@ -1,6 +1,6 @@
 import {RouteProp} from '@react-navigation/native';
 import {StackNavigationProp} from '@react-navigation/stack';
-import { IStore } from './products.types';
+import { IProduct, IStore } from './products.types';
 
 type RootStackParamList = {
   MainTab?: RootTabParamList;
@@ -13,10 +13,16 @@ type RootStackParamList = {
   SalonDetail: {
     dataStore: IStore;
   },
+  ProductDetail: {
+    dataProduct: IProduct;
+  },
   CartList: undefined;
   Checkout: undefined;
   PaymentSuccess: undefined;
-  FormBookingOrder: undefined;
+  FormBookingOrder: {
+    BOOKING_DATE: string;
+    BOOKING_TYPE: string;
+  };
   OtpVerification: undefined;
   DefaultFormUser: undefined;
   BookingOrder: undefined;
@@ -24,9 +30,12 @@ type RootStackParamList = {
 
 type RootTabParamList = {
   Home: undefined;
-  Booking: undefined;
-  Inbox: undefined;
-  Account: undefined;
+  Product: {
+    ANALISA_ID_GLOBAL?: string;
+  };
+  OfficialSalon: undefined;
+  Favorite: undefined;
+  Transaction: undefined;
 };
 
 export type RootRouteProps<RouteName extends keyof RootStackParamList> =

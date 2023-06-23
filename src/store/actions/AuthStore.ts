@@ -11,7 +11,7 @@ const useAuthStore = create<any>(
     persist(
         (set: SetState<any>) => ({
             isAuthenticated: false,
-            user: null,
+            user: {},
             login: async (username: string, password: string) => {
                 try {
                     const IP = await DeviceInfo.getIpAddress();

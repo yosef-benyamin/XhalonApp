@@ -2,6 +2,7 @@ import {
   Alert,
   FlatList,
   Image,
+  ScrollView,
   StyleSheet,
   Text,
   TextInput,
@@ -21,6 +22,7 @@ import {CartState, IItems} from 'types/cart.types';
 import {useProductStore} from 'store/actions/ProductStore';
 import {BASE_URL} from '@env';
 import {currencyFormat} from 'utils/currencyFormat';
+import { checkCart } from 'utils/addToCart';
 const AllCart = () => {
   const cartStore: CartState = useCartStore();
   const store = useProductStore(state => state.store);
@@ -37,7 +39,7 @@ const AllCart = () => {
     let sum = 0;
     cartStore?.cart?.ITEMS?.map((x, i) => {
       if (x?.IS_SELECTED) {
-        sum += x?.UNIT_PRICE_NET;
+        sum += (x?.UNIT_PRICE_NET * parseInt(x.QTY));
       }
     });
     setTotal(sum);
@@ -170,79 +172,84 @@ const AllCart = () => {
             />
           </>
         )}
-
-        {cartStore?.cart?.ITEMS?.map((x, i) => (
-          <View style={[rowCenter, {marginTop: 20}]}>
-            <TouchableOpacity onPress={() => handleSelect(x, i)}>
-              <Image
-                source={x?.IS_SELECTED ? ic_check : ic_uncheck}
-                style={iconSize}
-              />
-            </TouchableOpacity>
-            <Image
-              source={{uri: BASE_URL + '/' + x?.MAIN_IMAGE}}
-              style={[
-                iconCustomSize(90),
-                {borderRadius: 8, marginHorizontal: 10},
-              ]}
-            />
-            <View>
-              <Text></Text>
-              <Text
-                style={[
-                  h4,
-                  {
-                    padding: 5,
-                    borderRadius: 5,
-                    backgroundColor: theme.colors.grey7,
-                    marginVertical: 10,
-                  },
-                ]}>
-                Variasi: {x?.KET_ANALISA_GLOBAL}
-              </Text>
-              <View style={rowCenter}>
-                <Text
+        <ScrollView style={{marginBottom: 80}}>
+            {cartStore?.cart?.ITEMS?.map((x, i) => (
+              <View style={[rowCenter, {marginTop: 20}]}>
+                <TouchableOpacity onPress={() => handleSelect(x, i)}>
+                  <Image
+                    source={x?.IS_SELECTED ? ic_check : ic_uncheck}
+                    style={iconSize}
+                  />
+                </TouchableOpacity>
+                <Image
+                  source={{uri: BASE_URL + '/' + x?.MAIN_IMAGE}}
                   style={[
-                    h3,
-                    {
-                      color: theme.colors.grey4,
-                      textDecorationLine: 'line-through',
-                    },
-                  ]}>
-                  {currencyFormat(x?.UNIT_PRICE)}
-                </Text>
-                <Text
-                  style={{
-                    textDecorationLine: 'none',
-                    color: theme.colors.pink,
-                    marginLeft: 5,
-                  }}>
-                  {currencyFormat(x?.UNIT_PRICE_NET)}
-                </Text>
+                    iconCustomSize(90),
+                    {borderRadius: 8, marginHorizontal: 10},
+                  ]}
+                />
+                <View>
+                  <Text>{x?.PART_NAME}</Text>
+                  <Text
+                    style={[
+                      h4,
+                      {
+                        padding: 5,
+                        borderRadius: 5,
+                        backgroundColor: theme.colors.grey7,
+                        marginVertical: 10,
+                      },
+                    ]}>
+                    Variasi: {x?.KET_ANALISA_GLOBAL}
+                  </Text>
+                  <View style={rowCenter}>
+                    <Text
+                      style={[
+                        h3,
+                        {
+                          color: theme.colors.grey4,
+                          textDecorationLine: 'line-through',
+                        },
+                      ]}>
+                      {currencyFormat(x?.UNIT_PRICE)}
+                    </Text>
+                    <Text
+                      style={{
+                        textDecorationLine: 'none',
+                        color: theme.colors.pink,
+                        marginLeft: 5,
+                      }}>
+                      {currencyFormat(x?.UNIT_PRICE_NET)}
+                    </Text>
+                  </View>
+
+                  <View style={[rowCenter, {marginTop: 10}]}>
+                    <TouchableOpacity
+                      style={styles.icCount}
+                      onPress={() => handleReduceQty(x)}>
+                      <Text>-</Text>
+                    </TouchableOpacity>
+
+                    <TextInput style={styles.inputQty} value={x.QTY} />
+
+                    <TouchableOpacity
+                      style={styles.icCount}
+                      // onPress={() => handleAddQty(x)}
+                      onPress={() => checkCart(x)}
+                      >
+                      <Text>+</Text>
+                    </TouchableOpacity>
+                  </View>
+                </View>
               </View>
-
-              <View style={[rowCenter, {marginTop: 10}]}>
-                <TouchableOpacity
-                  style={styles.icCount}
-                  onPress={() => handleReduceQty(x)}>
-                  <Text>-</Text>
-                </TouchableOpacity>
-
-                <TextInput style={styles.inputQty} value={x.QTY} />
-
-                <TouchableOpacity
-                  style={styles.icCount}
-                  onPress={() => handleAddQty(x)}>
-                  <Text>+</Text>
-                </TouchableOpacity>
-              </View>
-            </View>
-          </View>
-        ))}
+            ))}
+            <View style={{paddingBottom: 20}} />
+        </ScrollView>
+        {/* <View style={{marginBottom: 20}} /> */}
       </View>
 
       <View style={[rowCenter, styles.footerWrapper]}>
-        <Image source={ic_uncheck} style={iconSize} />
+        <View/>
 
         <View style={[rowCenter]}>
           <View style={{alignItems: 'flex-end', marginRight: 10}}>
@@ -255,6 +262,7 @@ const AllCart = () => {
           </View>
           <Button
             title="pesan sekarang"
+            disabled={!(cartStore?.cart?.ITEMS?.find(x=> x.IS_SELECTED))}
             _theme="pink"
             onPress={() => {
               navigation.navigate('BookingOrder');
@@ -311,7 +319,7 @@ const styles = StyleSheet.create({
   },
   footerWrapper: {
     position: 'absolute',
-    bottom: 20,
+    bottom: -20,
     paddingVertical: 10,
     width: WINDOW_WIDTH,
     backgroundColor: '#fff',

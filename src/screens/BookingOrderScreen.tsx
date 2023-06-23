@@ -1,4 +1,5 @@
 import {
+  Alert,
   Image,
   ScrollView,
   StyleSheet,
@@ -47,6 +48,10 @@ const OtpVerificationScreen = () => {
   const navigation = useNavigation();
   const [modalVisible, setModalVisible] = useState(false);
   const [selectedBtn, setSelectedBtn] = useState(0);
+  const [jam, setJam] = useState('');
+  const [tanggal, setTanggal] = useState('');
+  const [bookingType, setBookingType] = useState<'TO HOME' | 'TO SALON'>('TO SALON');
+  
   useEffect(() => {
     navigation.setOptions(
       appBar({
@@ -86,20 +91,37 @@ const OtpVerificationScreen = () => {
             textDefaultColor: '#fff',
             selectedTextColor: '#fff',
           }}
+          mode='datepicker'
+
           style={{
-            width: WINDOW_WIDTH-50,
+            width: WINDOW_WIDTH - 50,
             alignSelf: 'center',
-            borderRadius: 10
+            borderRadius: 10,
           }}
+          onDateChange={(x)=> setTanggal(x)}
         />
 
         <Text style={[h1, {marginVertical: 10}]}>Jam Tersedia</Text>
 
         <View style={[rowCenter, {justifyContent: 'space-between'}]}>
           <Text style={{width: '10%'}}>Pagi</Text>
-          <Text style={styles.boxText}>10:00 AM</Text>
-          <Text style={styles.boxText}>11:00 AM</Text>
-          <Text style={styles.boxText}>11:30 AM</Text>
+          {/* <Text style={styles.boxText}>10:00 AM</Text>
+          <Text style={styles.boxText}>11:00 AM</Text> */}
+
+          {['10:00', '11:00', '11:30'].map((x, i) => (
+            <Text
+              onPress={() => setJam(x)}
+              key={i}
+              style={[
+                styles.boxText,
+                {
+                  backgroundColor: jam === x ? theme.colors.pink : '#fff',
+                  color: jam === x ? '#fff' : '#000',
+                },
+              ]}>
+              {x}
+            </Text>
+          ))}
         </View>
         <View
           style={[
@@ -107,18 +129,40 @@ const OtpVerificationScreen = () => {
             {justifyContent: 'space-between', marginVertical: 20},
           ]}>
           <Text style={{width: '10%'}}>Siang</Text>
-          <Text style={styles.boxText}>10:00 AM</Text>
-          <Text style={styles.boxText}>11:00 AM</Text>
-          <Text style={styles.boxText}>11:30 AM</Text>
+          {['12:00', '13:00', '14:00'].map((x, i) => (
+            <Text
+              onPress={() => setJam(x)}
+              key={i}
+              style={[
+                styles.boxText,
+                {
+                  backgroundColor: jam === x ? theme.colors.pink : '#fff',
+                  color: jam === x ? '#fff' : '#000',
+                },
+              ]}>
+              {x}
+            </Text>
+          ))}
         </View>
         <View style={[rowCenter, {justifyContent: 'space-between'}]}>
           <Text style={{width: '10%'}}>Sore</Text>
-          <Text style={styles.boxText}>10:00 AM</Text>
-          <Text style={styles.boxText}>11:00 AM</Text>
-          <Text style={styles.boxText}>11:30 AM</Text>
+          {['17:00', '17:30', '18:00'].map((x, i) => (
+            <Text
+              onPress={() => setJam(x)}
+              key={i}
+              style={[
+                styles.boxText,
+                {
+                  backgroundColor: jam === x ? theme.colors.pink : '#fff',
+                  color: jam === x ? '#fff' : '#000',
+                },
+              ]}>
+              {x}
+            </Text>
+          ))}
         </View>
 
-        <Text style={[h1, {marginVertical: 10, marginTop: 20}]}>Terapis</Text>
+        {/* <Text style={[h1, {marginVertical: 10, marginTop: 20}]}>Terapis</Text>
 
         <View>
           <ScrollView horizontal>
@@ -129,28 +173,49 @@ const OtpVerificationScreen = () => {
               </View>
             ))}
           </ScrollView>
-        </View>
+        </View> */}
 
-        <View style={[rowCenter, {justifyContent: 'space-between', marginTop: 20}]}>
-          <TouchableOpacity style={selectedBtn !== 0 ? styles.activeButton : styles.inactiveButton} onPress={()=>setSelectedBtn(0)}>
-            <Text style={selectedBtn !== 0 ? {color: '#000'} : {color: '#fff'}}>Datang Ke Salon</Text>
+        <View
+          style={[rowCenter, {justifyContent: 'space-between', marginTop: 20}]}>
+          <TouchableOpacity
+            style={
+              bookingType !== 'TO SALON' ? styles.activeButton : styles.inactiveButton
+            }
+            onPress={() => setBookingType('TO SALON')}>
+            <Text style={bookingType !== 'TO SALON' ? {color: '#000'} : {color: '#fff'}}>
+              Datang Ke Salon
+            </Text>
           </TouchableOpacity>
 
-          <TouchableOpacity style={selectedBtn !== 1 ? styles.activeButton : styles.inactiveButton} onPress={()=>setSelectedBtn(1)}>
-            <Text style={selectedBtn !== 1 ? {color: '#000'} : {color: '#fff'}}>Booking Ke Rumah</Text>
+          <TouchableOpacity
+            style={
+              bookingType !== 'TO HOME' ? styles.activeButton : styles.inactiveButton
+            }
+            onPress={() => setBookingType('TO HOME')}>
+            <Text style={bookingType !== 'TO HOME' ? {color: '#000'} : {color: '#fff'}}>
+              Booking Ke Rumah
+            </Text>
           </TouchableOpacity>
         </View>
 
         <Button
-          _theme='pink'
-          title='Lanjutkan'
-          onPress={()=> {navigation.navigate('FormBookingOrder')}}
+          _theme="pink"
+          disabled={(!tanggal || !jam || !bookingType)}
+          title="Lanjutkan"
+          onPress={() => {
+            console.log('tanggal = ', tanggal);
+
+            navigation.navigate('FormBookingOrder', {
+              BOOKING_DATE: tanggal.toString().replace(/\//g, "-") + ' '+ jam,
+              BOOKING_TYPE: bookingType,
+
+            });
+          }}
           styleWrapper={{
-            marginTop: 20
+            marginTop: 20,
           }}
         />
       </ScrollView>
-     
     </View>
   );
 };
@@ -165,7 +230,7 @@ const styles = StyleSheet.create({
     padding: 10,
     borderRadius: 8,
     width: '45%',
-    alignItems: 'center'
+    alignItems: 'center',
   },
   inactiveButton: {
     elevation: 4,
@@ -173,6 +238,6 @@ const styles = StyleSheet.create({
     padding: 10,
     borderRadius: 8,
     width: '45%',
-    alignItems: 'center'
-  }
+    alignItems: 'center',
+  },
 });

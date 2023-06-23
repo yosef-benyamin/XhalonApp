@@ -16,58 +16,7 @@ import {theme} from 'utils';
 
 const RootTab = createBottomTabNavigator<RootTabParamList>();
 
-// const FadeInView = (props: any) => {
-//   const fadeAnim = React.useRef(new Animated.Value(0)).current; // Initial value for opacity: 0
 
-//   useFocusEffect(() => {
-//     Animated.timing(fadeAnim, {
-//       toValue: 1,
-//       duration: 500,
-//       useNativeDriver: true,
-//     }).start();
-//     return () => {
-//       Animated.timing(fadeAnim, {
-//         toValue: 0,
-//         duration: 250,
-//         useNativeDriver: true,
-//       }).start();
-//     };
-//   });
-
-//   return (
-//     <Animated.View // Special animatable View
-//       style={{
-//         flex: 1,
-//         opacity: fadeAnim, // Bind opacity to animated value
-//       }}>
-//       {props.children}
-//     </Animated.View>
-//   );
-// };
-
-// const FadeHomeScreen = (props: any) => (
-//   <FadeInView>
-//     <LoginScreen {...props} />
-//   </FadeInView>
-// );
-
-// const FadeBookingScreen = (props: any) => (
-//   <FadeInView>
-//     <LoginScreen {...props} />
-//   </FadeInView>
-// );
-
-// const FadeInboxScreen = (props: any) => (
-//   <FadeInView>
-//     <LoginScreen {...props} />
-//   </FadeInView>
-// );
-
-// const FadeAccountScreen = (props: any) => (
-//   <FadeInView>
-//     <LoginScreen {...props} />
-//   </FadeInView>
-// );
 
 const MainTab: React.FC = () => {
   return (

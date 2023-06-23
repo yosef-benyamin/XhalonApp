@@ -9,22 +9,26 @@ import {
 import React from 'react';
 import {ic_menu, ic_cart, ic_chat, ic_search} from 'assets/icons';
 import {theme} from 'utils';
-import {rowCenter, iconCustomSize} from 'utils/mixins';
+import {rowCenter, iconCustomSize, WINDOW_WIDTH} from 'utils/mixins';
 import {h1} from 'utils/styles';
 import {useNavigation} from '@react-navigation/native';
-import { useDrawerStore } from 'store/effects/drawerStore';
+import {useDrawerStore} from 'store/effects/drawerStore';
+import {useCartStore} from 'store/actions/cartStore';
+import {CartState} from 'types/cart.types';
 
 const MainHeader = () => {
   const navigation = useNavigation();
   const openDrawer = useDrawerStore() as any;
+  const cartStore: CartState = useCartStore();
 
   return (
     <View style={styles.headerWrapper}>
       <View style={[rowCenter, {justifyContent: 'space-between'}]}>
         <View style={rowCenter}>
-          <TouchableOpacity onPress={()=> {
-              openDrawer.toggleDrawer({isShowDrawer: !openDrawer.isShowDrawer})
-          }}>
+          <TouchableOpacity
+            onPress={() => {
+              openDrawer.toggleDrawer({isShowDrawer: !openDrawer.isShowDrawer});
+            }}>
             <Image
               source={ic_menu}
               style={[iconCustomSize(30), {borderRadius: 4}]}
@@ -41,6 +45,16 @@ const MainHeader = () => {
               source={ic_cart}
               style={[iconCustomSize(30), {marginRight: 10, borderRadius: 4}]}
             />
+
+            <View style={styles.ballCart}>
+              <Text
+                style={{
+                  fontSize: 9,
+                  color: theme.colors.pink,
+                }}>
+                {cartStore?.cart?.ITEMS?.length}
+              </Text>
+            </View>
           </TouchableOpacity>
           <Image
             source={ic_chat}
@@ -107,10 +121,21 @@ const styles = StyleSheet.create({
     },
     shadowOpacity: 0.25,
     shadowRadius: 3.84,
-
     elevation: 5,
     alignItems: 'center',
     justifyContent: 'center',
     marginRight: 10,
+  },
+  ballCart: {
+    position: 'absolute',
+    backgroundColor: theme.colors.white,
+    height: 20,
+    width: 20,
+    top: -10,
+    right: 5,
+    elevation: 4,
+    alignItems: 'center',
+    justifyContent: 'center',
+    borderRadius: WINDOW_WIDTH / 2,
   },
 });

@@ -7,6 +7,8 @@ import {ic_arrow_left_black, ic_arrow_left_white, ic_chat} from 'assets/icons';
 import {h1, h2} from 'utils/styles';
 import {theme} from 'utils';
 import AllCart from 'components/CartListComponents/AllCart';
+import { CartState } from 'types/cart.types';
+import { useCartStore } from 'store/actions/cartStore';
 
 type ITabKeys = 'semua' | 'diskon' | 'pesan_lagi';
 
@@ -18,9 +20,10 @@ interface ITabs {
 const CartListScreen = () => {
   const navigation = useNavigation();
   const [selectedTab, setSelectedTab] = useState<ITabKeys>('semua');
+  const cartStore: CartState = useCartStore();
   const TABS: ITabs[] = [
     {
-      title: 'Semua(99)',
+      title: `Semua(${cartStore?.cart?.ITEMS?.length || ''})`,
       keys: 'semua',
     },
     // {
@@ -72,9 +75,7 @@ const CartListScreen = () => {
             }>
             <Text style={[h2, {color: selectedTab === x.keys? theme.colors.pink : theme.colors.grey5}]}>{x.title}</Text>
           </TouchableOpacity>
-        ))}
-
-        
+        ))}        
       </View>
       {selectedTab === 'semua' && <AllCart/>}
     </View>

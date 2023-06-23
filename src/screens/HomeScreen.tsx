@@ -8,7 +8,7 @@ import {
   TouchableOpacity,
   View,
 } from 'react-native';
-import React, { useEffect } from 'react';
+import React, {useEffect, useState} from 'react';
 import {iconCustomSize, iconSize, rowCenter, WINDOW_WIDTH} from 'utils/mixins';
 import {ic_cart, ic_chat, ic_haircut, ic_menu, ic_search} from 'assets/icons';
 import {h1, h2, h3, h4, h5} from 'utils/styles';
@@ -16,13 +16,20 @@ import {theme} from 'utils';
 import {ic_beard, img_barber, img_boy, img_dash} from 'assets/images';
 import Carousel from 'react-native-reanimated-carousel';
 import MainHeader from 'components/MainHeader/MainHeader';
-import { useNavigation } from '@react-navigation/native';
-import { useProductStore } from 'store/actions/ProductStore';
+import {useNavigation} from '@react-navigation/native';
+import {useProductStore} from 'store/actions/ProductStore';
+import { getBanners, kategoriFavorit, storePromo } from 'store/effects/productStore';
+import { Banners } from 'types/products.types';
+import { BASE_URL } from '@env';
+import HeaderCarousel from './HeaderCarousel';
 
 const HomeScreen = () => {
   const navigation = useNavigation();
 
-  const ProductStore = useProductStore((state) => state);
+  const ProductStore = useProductStore(state => state);
+  const [productFav, setproductFav] = useState([]);
+  const [storeP, setStoreP] = useState([]);
+  
 
   // console.log('ProductStore = ', ProductStore.store)
 
@@ -31,8 +38,24 @@ const HomeScreen = () => {
     ProductStore.getGroupCategory();
     ProductStore.getProduct();
     ProductStore.getCategory();
+    getKategoriFavorit();
+    getStorePromo();
   }, [navigation]);
-  
+
+  const getKategoriFavorit=async()=> {
+    let resFav = await kategoriFavorit();
+    resFav = resFav;
+    setproductFav(resFav?.rs?.DATA)
+    console.log('res = ', resFav);
+  }
+
+  const getStorePromo=async()=> {
+    let resFav = await storePromo();
+    resFav = resFav;
+    setStoreP(resFav?.rs?.DATA)
+    console.log('res = ', resFav);
+  }
+
   return (
     <View
       style={{
@@ -40,67 +63,27 @@ const HomeScreen = () => {
         backgroundColor: '#ffffff',
       }}>
       <ScrollView nestedScrollEnabled>
-        {
-          //*start of header section
-        }
-        <MainHeader />
-        {
-          //*end of header section
-        }
-
-        <View style={{marginTop: -30}}>
-          <Carousel
-            loop
-            width={WINDOW_WIDTH}
-            height={WINDOW_WIDTH / 2}
-            autoPlay={true}
-            data={[...new Array(6).keys()]}
-            scrollAnimationDuration={1000}
-            // onSnapToItem={index => console.log('current index:', index)}
-            renderItem={({index}) => (
-              <View
-                style={[
-                  rowCenter,
-                  styles.sliderImgWrapper,
-                  {marginHorizontal: 10},
-                ]}>
-                <View style={{padding: 20, width: '60%'}}>
-                  <Text style={[h1, {color: '#fff'}]}>
-                    Collection hair & beard
-                  </Text>
-                  <Text style={[h5, {color: '#fff'}]}>
-                    here are many variations of passages of Lorem Ipsum
-                    available
-                  </Text>
-                  <View style={styles.boxService}>
-                    <Text style={[h1, {color: '#fff'}]}>See All services</Text>
-                  </View>
-                </View>
-                <Image
-                  source={img_boy}
-                  style={{
-                    width: 100,
-                    height: 120,
-                  }}
-                />
-              </View>
-            )}
-          />
-        </View>
+        <HeaderCarousel/>
 
         <View style={[rowCenter, {margin: 16}]}>
-          {[...Array(6).fill(0)].map((x, i) => (
-            <TouchableOpacity key={i} style={styles.typeWrapper}>
-              <Image source={ic_haircut} style={iconSize} />
-              <Text
-                style={[
-                  h2,
-                  {color: theme.colors.pink, fontSize: 10, marginTop: 5},
-                ]}>
-                Rambut
-              </Text>
-            </TouchableOpacity>
-          ))}
+          {ProductStore?.groupCategory?.length > 0 &&
+            [...ProductStore?.groupCategory].map((x, i) => (
+              <TouchableOpacity key={i} style={styles.typeWrapper}>
+                <Image source={{uri: x?.THUMB_IMAGE}} style={iconSize} />
+                <Text
+                  style={[
+                    h2,
+                    {
+                      color: theme.colors.pink,
+                      fontSize: 10,
+                      marginTop: 5,
+                      textAlign: 'center',
+                    },
+                  ]}>
+                  {x?.GROUP_ANALISA_NAME}
+                </Text>
+              </TouchableOpacity>
+            ))}
         </View>
 
         <View style={{margin: 16}}>
@@ -117,19 +100,34 @@ const HomeScreen = () => {
 
           <View style={rowCenter}>
             <ScrollView horizontal>
-              {[...Array(6).fill(0)].map((x, i) => (
-                <View>
-                  <Image
-                    source={ic_beard}
-                    style={{
-                      width: 70,
-                      height: 53,
-                      marginRight: 10,
-                    }}
-                  />
-                  <Text style={h4}>Beard</Text>
-                </View>
-              ))}
+              {productFav?.length > 0 &&
+                [...productFav].map((x, i) => (
+                  <TouchableOpacity
+                    key={i}
+                    style={{alignItems: 'center', width: 110}}
+                    onPress={() => {
+                      console.log('x?.ANALISA_ID_GLOBAL = ', x)
+                      navigation.navigate('MainTab', {
+                        screen: 'Product',
+                        params: {
+                          ANALISA_ID_GLOBAL: x?.ANALISA_ID_GLOBAL,
+                        },
+                      });
+                    }}>
+                    <Image
+                      source={ic_beard}
+                      // source={{uri: x?.THUMB_IMAGE!}}
+                      style={{
+                        width: 70,
+                        height: 53,
+                        // marginRight: 10,
+                      }}
+                    />
+                    <Text style={[h4, {textAlign: 'center', width: '70%'}]}>
+                      {x?.KET_ANALISA_GLOBAL}
+                    </Text>
+                  </TouchableOpacity>
+                ))}
             </ScrollView>
           </View>
         </View>
@@ -148,20 +146,24 @@ const HomeScreen = () => {
 
           <View style={rowCenter}>
             <ScrollView horizontal>
-              {[...ProductStore?.store].map((x, i) => (
-                <TouchableOpacity onPress={()=> navigation.navigate('SalonDetail', {
-                  dataStore: x
-                })}>
-                <Image
-                  source={img_barber}
-                  style={{
-                    width: WINDOW_WIDTH / 1.5,
-                    height: 150,
-                    marginRight: 10,
-                  }}
-                />
-                </TouchableOpacity>
-              ))}
+              {storeP?.length > 0 &&
+                [...storeP].map((x, i) => (
+                  <TouchableOpacity
+                    onPress={() =>
+                      navigation.navigate('SalonDetail', {
+                        dataStore: x,
+                      })
+                    }>
+                    <Image
+                      source={img_barber}
+                      style={{
+                        width: WINDOW_WIDTH / 1.5,
+                        height: 150,
+                        marginRight: 10,
+                      }}
+                    />
+                  </TouchableOpacity>
+                ))}
             </ScrollView>
           </View>
         </View>
@@ -180,7 +182,7 @@ const HomeScreen = () => {
 
           <View style={rowCenter}>
             <ScrollView horizontal>
-              {[...Array(6).fill(0)].map((x, i) => (
+              {storeP?.length > 0 && [...storeP].map((x, i) => (
                 <Image
                   source={img_barber}
                   style={{
@@ -243,24 +245,8 @@ const styles = StyleSheet.create({
     borderBottomEndRadius: 50,
     borderBottomLeftRadius: 50,
   },
-  sliderImgWrapper: {
-    // width: WINDOW_WIDTH,
-    // height: 150,
-    backgroundColor: '#000',
-    // marginRight: 10,
-    // marginLeft: 0,
-    // paddingHorizontal: 10,
-    borderRadius: 10,
-    justifyContent: 'space-between',
-  },
-  boxService: {
-    borderWidth: 3,
-    borderColor: 'yellow',
-    padding: 10,
-    borderRadius: 10,
-    width: '80%',
-    marginTop: 10,
-  },
+  
+  
   typeWrapper: {
     borderRadius: 50,
     height: 70,
