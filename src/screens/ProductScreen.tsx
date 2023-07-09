@@ -39,6 +39,7 @@ import {useProductStore} from 'store/actions/ProductStore';
 import {IProduct} from 'types/products.types';
 import ProductCard from 'components/ProductCard';
 import HeaderCarousel from './HeaderCarousel';
+import ChipSelect from 'components/Chip/ChipSelect';
 
 const HomeScreen = () => {
   const route = useRoute<any>();
@@ -68,12 +69,19 @@ const HomeScreen = () => {
   }, [navigation]);
 
   const renderItem: any = useCallback(
-    (item: IProduct) => (
-      <ProductCard item={item} />
-    ),
+    (item: IProduct) => <ProductCard item={item} />,
     [],
   );
 
+  const [chipSelect, setChipSelect] = useState('');
+
+  useEffect(() => {
+    ProductStore.filterProduct(chipSelect)
+    return () => {
+      
+    }
+  }, [chipSelect])
+  
   return (
     <View
       style={{
@@ -81,7 +89,7 @@ const HomeScreen = () => {
         backgroundColor: '#ffffff',
       }}>
       <ScrollView nestedScrollEnabled>
-        <HeaderCarousel/>
+        <HeaderCarousel />
         {/* {console.log('group = ', ProductStore?.groupCategory)} */}
         {/* <View style={[rowCenter, {margin: 16}]}>
           <ScrollView horizontal>
@@ -115,7 +123,7 @@ const HomeScreen = () => {
 
         <View style={{margin: 16}}>
           <ScrollView horizontal>
-            {[{KET_ANALISA: 'Semua', ANALISA_ID: ''},...ProductStore?.category].map((x, i) => (
+            {/* {[{KET_ANALISA: 'Semua', ANALISA_ID: ''},...ProductStore?.category].map((x, i) => (
               <TouchableOpacity
                 style={{
                   padding: 10,
@@ -129,9 +137,15 @@ const HomeScreen = () => {
                 >
                 <Text style={{color: theme.colors.pink}}>{x?.KET_ANALISA}</Text>
               </TouchableOpacity>
-            ))}
+            ))} */}
+            <ChipSelect
+              items={ProductStore?.category?.map((x, i) => x.KET_ANALISA)}
+              selected={chipSelect}
+              setSelected={setChipSelect}
+            />
           </ScrollView>
         </View>
+
         <View style={{marginHorizontal: 16}}>
           <GridFlatList
             data={[...ProductStore?.product]}

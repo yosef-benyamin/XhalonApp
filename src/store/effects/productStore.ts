@@ -31,6 +31,84 @@ export const kategoriFavorit = async () => {
 }
 
 
+export const listHistory = async (status: string = 'NEW_APP') => {
+    try {
+        // const IP = await DeviceInfo.getIpAddress();
+        const basic = await basicData();
+        const response: any = await apiWithInterceptor({
+            method: 'post',
+            url: '/SALES/order',
+            data: {
+                "rq": {
+                    "ACTION_ID": "LIST_HM",
+                    ...basic,
+                    "FILTER_DAY": "",
+                    "FILTER_MONTH": "",
+                    "FILTER_YEAR": "",
+                    "FILTER_FIELD": "",
+                    "FILTER_VALUE": "",
+                    "PAGE_NO": "1",
+                    "PAGE_ROW": "20",
+                    "SORT_ORDER_BY": "SALES_DATE",
+                    "SORT_ORDER_TYPE": "DESC",
+                    "TRANSACTION_ID": "",
+                    "STATUS_ID": "",
+                    "STATUS_CATEGORY": status
+                }
+            },
+        });
+        return response.data;
+    } catch (error) {
+        Alert.alert('Peringatan', 'Terjadi kesalahan, silahkan hubungi admin.');
+    }
+}
+
+
+
+export const listDetailTransaction = async (SALES_ID: string = '') => {
+    try {
+        // const IP = await DeviceInfo.getIpAddress();
+        const basic = await basicData();
+        const response: any = await apiWithInterceptor({
+            method: 'post',
+            url: '/SALES/order_detail',
+            data: {
+                "rq": {
+                    "ACTION_ID": "LIST_D",
+                    ...basic,
+                    "SALES_ID": SALES_ID
+                }
+            },
+        });
+        return response.data;
+    } catch (error) {
+        Alert.alert('Peringatan', 'Terjadi kesalahan, silahkan hubungi admin.');
+    }
+}
+
+export const getOrderStatus = async (SALES_ID: string = '') => {
+    try {
+        // const IP = await DeviceInfo.getIpAddress();
+        console.log('sales = ', SALES_ID)
+        const basic = await basicData();
+        const response: any = await apiWithInterceptor({
+            method: 'post',
+            url: '/SALES/order',
+            data: {
+                "rq": {
+                    "ACTION_ID": "LIST_HM_HISTORY",
+                    ...basic,
+                    "SALES_ID": SALES_ID
+                }
+            },
+        });
+        return response.data;
+    } catch (error) {
+        Alert.alert('Peringatan', 'Terjadi kesalahan, silahkan hubungi admin.');
+    }
+}
+
+
 
 export const storePromo = async () => {
     try {

@@ -148,29 +148,27 @@ const FormBookingOrderScreen = () => {
       ORDER_POINT: location.latitude + ',' + location.longitude,
       ORDER_DISTANCE: '12',
       NOTE: '',
-      ITEMS: [...cartStore.cart?.ITEMS?.filter(x=> x?.IS_SELECTED)!],
+      ITEMS: [...cartStore.cart?.ITEMS?.filter(x => x?.IS_SELECTED)!],
     };
-    setLoader(true)
+    setLoader(true);
     let res: any = await cartStore.addOrder(data);
-    setLoader(false)
-    console.log('res = ', res)
+    setLoader(false);
+    console.log('res = ', res);
     if (res === 200) {
       navigation.navigate('Checkout');
     }
     // console.log('data = ', data);
   };
 
-  if(loader) {
-    return (
-      <Loading/>
-    )
+  if (loader) {
+    return <Loading />;
   }
   return (
-    <View style={{flex: 1, padding: 10}}>
+    <View style={{flex: 1, padding: 10, backgroundColor: '#fff'}}>
       <ScrollView>
         <Text
-          style={[h1, {textAlign: 'center', fontSize: 24, marginVertical: 5}]}>
-          Pilih Alamat Pesanan
+          style={[h1, {textAlign: 'center', fontSize: 14, marginVertical: 5}]}>
+          Form Alamat Pesanan
         </Text>
 
         <CustomTextInput
@@ -226,7 +224,7 @@ const FormBookingOrderScreen = () => {
         <CustomTextInput
           title="Kode Pos"
           placeholder="Kode Pos"
-          keyboardType='numeric'
+          keyboardType="numeric"
           errorMessage=""
           onChangeText={v => {
             setForm({...form, kode_pos: v});
@@ -243,7 +241,14 @@ const FormBookingOrderScreen = () => {
 
         <Button
           _theme="pink"
-          disabled={(!form.name || !form.address || !form.kelurahan || !form.kecamatan || !form.kota || !form.kode_pos)}
+          disabled={
+            !form.name ||
+            !form.address ||
+            !form.kelurahan ||
+            !form.kecamatan ||
+            !form.kota ||
+            !form.kode_pos
+          }
           title="Lanjutkan"
           onPress={handleAdd}
           styleWrapper={{

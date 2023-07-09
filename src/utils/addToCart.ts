@@ -4,6 +4,7 @@ import { useCartStore } from "store/actions/cartStore";
 import { CartState, IItems } from "types/cart.types";
 import { IProduct } from "types/products.types";
 import deepClone from "./deepClone";
+import { Toast } from "react-native-toast-message/lib/src/Toast";
 
 const checkCart = (data: IProduct) => {
     const cartStore: CartState = useCartStore.getState();
@@ -50,7 +51,12 @@ const checkCart = (data: IProduct) => {
         ...data,
         QTY: '1',
       });
-      Alert.alert('sukses', 'Produk berhasil ditambah ke keranjang')
+      // Alert.alert('sukses', 'Produk berhasil ditambah ke keranjang')
+      Toast.show({
+        type: 'success',
+        text1: 'Berhasil',
+        text2: 'Berhasil menambahkan produk.'
+      });
     } else {
       const id = _items.findIndex((x: any) => x?.PART_ID === data?.PART_ID);
 
@@ -63,10 +69,20 @@ const checkCart = (data: IProduct) => {
         console.log('masuk fi');
         let _ = JSON.parse(_items[id].QTY);
         _items[id].QTY = JSON.stringify(_ + 1);
-        Alert.alert('sukses', 'Produk berhasil ditambah ke keranjang')
+        // Alert.alert('sukses', 'Produk berhasil ditambah ke keranjang')
+        Toast.show({
+          type: 'success',
+          text1: 'Berhasil',
+          text2: 'Berhasil menambahkan produk.',
+        });
       } else {
         console.log('masuk else');
-        Alert.alert('sukses', 'Produk berhasil ditambah ke keranjang')
+        // Alert.alert('sukses', 'Produk berhasil ditambah ke keranjang')
+        Toast.show({
+          type: 'success',
+          text1: 'Berhasil',
+          text2: 'Berhasil menambahkan produk.'
+        });
         _items.push({
           SALES_ID: '215192B0A720933892E',
           QTY: '1',

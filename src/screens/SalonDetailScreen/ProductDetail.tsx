@@ -14,19 +14,22 @@ import {
   ic_arrow_left_black,
   ic_burgermenu,
   ic_cart,
+  ic_chat,
   ic_crown,
   ic_glasses,
   ic_heart,
+  ic_broken_image,
   ic_heart_line,
   ic_love,
   ic_pinpoin,
   ic_star,
   ic_stars,
+  ic_store_active,
 } from 'assets/icons';
 import {WINDOW_WIDTH, iconCustomSize, iconSize, rowCenter} from 'utils/mixins';
 import {theme} from 'utils';
 import {img_barber, img_hair} from 'assets/images';
-import {h1, h2, h4} from 'utils/styles';
+import {h1, h2, h3, h4, h5} from 'utils/styles';
 import TopNavigation from './TopNavigation';
 import {
   RouteProp,
@@ -39,10 +42,11 @@ import {useProductStore} from 'store/actions/ProductStore';
 import Loading from 'components/Loading';
 import {currencyFormat} from 'utils/currencyFormat';
 import ProductCard from 'components/ProductCard';
-import { useFavoriteStore } from 'store/actions/favoritStore';
-import { addFavorit, deleteFavorit } from 'store/effects/favoritStore';
+import {useFavoriteStore} from 'store/actions/favoritStore';
+import {addFavorit, deleteFavorit} from 'store/effects/favoritStore';
 import Button from 'components/Button';
-import { checkCart } from 'utils/addToCart';
+import {checkCart} from 'utils/addToCart';
+import {BASE_URL} from '@env';
 
 type ProductDetailScreenRouteProp = RouteProp<
   RootStackParamList,
@@ -59,19 +63,18 @@ const ProductDetailScreen = () => {
 
   const favoriteStore = useFavoriteStore(state => state);
 
-
-  const getFav=async()=> {
+  const getFav = async () => {
     // setLoader(true)
     favoriteStore.getFavorite();
     // setLoader(false)
-  }
+  };
 
   const handleDeleteFav = async (id: any) => {
     let _ = [];
     _.push({
       PART_ID: id,
     });
-    
+
     let res = await deleteFavorit(_);
     getFav();
   };
@@ -81,11 +84,10 @@ const ProductDetailScreen = () => {
     _.push({
       PART_ID: id,
     });
-    
+
     let res = await addFavorit(_);
     getFav();
   };
-
 
   useEffect(() => {
     setIsLoading(true);
@@ -110,59 +112,95 @@ const ProductDetailScreen = () => {
   if (isLoading) return <Loading />;
 
   return (
-    <View style={{flex: 1}}>
+    <View style={{flex: 1, backgroundColor: '#fff'}}>
       <View style={[rowCenter, styles.header]}>
-        <TouchableOpacity style={styles.whiteBox}>
-          <Image source={ic_arrow_left_black} style={[iconSize]} />
+        <TouchableOpacity
+          style={styles.whiteBox}
+          onPress={() => navigation.goBack()}>
+          <Image
+            source={ic_arrow_left_black}
+            style={[iconCustomSize(17)]}
+            resizeMode="stretch"
+          />
         </TouchableOpacity>
 
-        <View style={[rowCenter, styles.searchBox]}>
-          <TextInput
-            placeholder="Pencarian Produk"
-            style={{width: '50%', fontSize: 12, padding: 2}}
-          />
-          <Image source={ic_glasses} style={iconSize} />
-        </View>
+        <TouchableOpacity
+          style={[rowCenter, styles.searchBox]}
+          onPress={() => navigation.navigate('Search')}>
+          <Text style={[h5, {fontSize: 12}]}>Pencarian Produk</Text>
+          <Image source={ic_glasses} style={[iconCustomSize(14)]} />
+        </TouchableOpacity>
         <TouchableOpacity
           style={styles.whiteBox}
           onPress={() => navigation.navigate('CartList')}>
-          <Image source={ic_cart} style={iconSize} />
+          <Image
+            source={ic_cart}
+            style={[iconSize, {}]}
+          />
         </TouchableOpacity>
 
         <TouchableOpacity style={styles.whiteBox}>
-          <Image source={ic_burgermenu} style={iconSize} />
+          <Image
+            source={ic_chat}
+            style={[iconSize, {}]}
+          />
         </TouchableOpacity>
       </View>
 
       <ScrollView ref={refSv}>
         <View style={{marginHorizontal: 16}}>
           <Image
-            source={img_hair}
+            source={
+              dataStore?.MAIN_IMAGE
+                ? {uri: BASE_URL + '/' + dataStore?.MAIN_IMAGE}
+                : ic_broken_image
+            }
             style={{
               height: 370,
-              width: 370,
+              width: WINDOW_WIDTH - 20,
               borderRadius: 10,
               alignSelf: 'center',
+              resizeMode: 'cover',
             }}
           />
 
-          <View style={[rowCenter, {justifyContent: 'space-between'}]}>
-            <View style={[rowCenter]}>
-              <Text>
-                20%{' '}
-                <Text style={{textDecorationLine: 'line-through'}}>
-                  {currencyFormat(25000)}
-                </Text>
+          <View
+            style={[
+              rowCenter,
+              {justifyContent: 'space-between', marginTop: 10},
+            ]}>
+            <View>
+
+            {dataStore?.DISCOUNT_VAL !== 0 ? (
+                <View style={[rowCenter]}>
+                  <Text style={[h4, {}]}>
+                    {dataStore?.DISCOUNT_VAL}%{' '}
+                    <Text style={{textDecorationLine: 'line-through', fontWeight: '300'}}>
+                      {currencyFormat(dataStore?.UNIT_PRICE)}
+                    </Text>
+                  </Text>
+                </View>
+              ) : (
+                <View />
+              )}
+              <Text style={[h1, {fontSize: 21}]}>
+                {currencyFormat(dataStore?.UNIT_PRICE)}
               </Text>
+              <Text
+                style={[
+                  h1,
+                  {fontSize: 17, marginVertical: 5, color: theme.colors.grey2},
+                ]}>
+                {dataStore?.PART_NAME}
+              </Text>
+              
             </View>
             <TouchableOpacity
+              style={{
+                alignSelf: 'flex-start',
+                marginTop: 10,
+              }}
               onPress={() => {
-                console.log(
-                  'part id = ',
-                  favoriteStore?.listFavorite?.find(
-                    x => x?.NO_TRX === dataStore?.PART_ID,
-                  ),
-                );
                 if (
                   favoriteStore?.listFavorite?.find(
                     x => x?.PART_ID === dataStore?.PART_ID,
@@ -173,20 +211,22 @@ const ProductDetailScreen = () => {
                   handleAddFav(dataStore.PART_ID);
                 }
               }}>
-              <Image source={favoriteStore?.listFavorite?.find(x=> x?.PART_ID === dataStore?.PART_ID)?.PART_ID ? ic_heart : ic_heart_line} style={iconCustomSize(24)} />
+              <Image
+                source={
+                  favoriteStore?.listFavorite?.find(
+                    x => x?.PART_ID === dataStore?.PART_ID,
+                  )?.PART_ID
+                    ? ic_heart
+                    : ic_heart_line
+                }
+                style={iconCustomSize(24)}
+              />
             </TouchableOpacity>
           </View>
 
-          <Text style={[h1, {fontSize: 21}]}>
-            {currencyFormat(dataStore?.UNIT_PRICE)}
-          </Text>
-          <Text style={[h1, {fontSize: 18, marginVertical: 10}]}>
-            {dataStore?.PART_NAME}
-          </Text>
-
           <ScrollView horizontal>
             <View style={[rowCenter, {justifyContent: 'space-between'}]}>
-              <Text style={[h4, {fontSize: 15}]}>Terjual 1000</Text>
+              <Text style={[h3, {fontSize: 16, fontWeight: '300'}]}>Terjual 1000</Text>
 
               <TouchableOpacity
                 style={[
@@ -229,57 +269,74 @@ const ProductDetailScreen = () => {
 
           <Text style={[h1]}>Terlaris #1</Text>
 
-          <View
-            style={{
-              borderBottomWidth: 1,
-              borderBottomColor: '#000',
-              marginVertical: 10,
-            }}
-          />
+          <View style={styles.lineHorizontal} />
 
-          <Text style={[h1, {fontSize: 16}]}>Deskripsi Produk</Text>
-          <Text style={[h1, {fontSize: 13, marginTop: 10, height: 100}]}>
-            Catok adalah ....
+          <Text style={[h1, {fontSize: 21}]}>Deskripsi Produk</Text>
+          <Text
+            style={[
+              h4,
+              {
+                fontSize: 16,
+                marginTop: 10,
+                height: 100,
+                fontWeight: '500',
+                color: '#000',
+                lineHeight: 24,
+              },
+            ]}>
+            Lorem ipsum dolor sit amet consectetur adipisicing elit. Repellat,
+            excepturi sed provident magni odit accusamus beatae eveniet velit
+            veniam non quidem aut incidunt quae error. Quam nesciunt nisi id
+            accusantium!
           </Text>
 
-          <View
-            style={{
-              borderBottomWidth: 1,
-              borderBottomColor: '#000',
-              marginVertical: 10,
-            }}
-          />
+          <View style={styles.lineHorizontal} />
 
           <View style={[rowCenter, {margin: 16}]}>
-            <Image
-              source={img_barber}
-              style={{width: 113, height: 68, borderRadius: 10}}
-            />
+          <Image
+                  source={ProductStore?.store?.find(
+                    x => x.COMPANY_ID === dataStore?.COMPANY_ID,
+                  )?.THUMB_IMAGE ? {uri: BASE_URL+'/'+ProductStore?.store?.find(
+                    x => x.COMPANY_ID === dataStore?.COMPANY_ID,
+                  )?.THUMB_IMAGE}: ic_broken_image }
+                  style={{height: 68, width: 113, borderRadius: 10}}
+                  resizeMode={'contain'}
+                />
 
             <View style={[{marginLeft: 10}]}>
               <View style={rowCenter}>
                 <Image
                   source={ic_crown}
-                  style={iconSize}
+                  style={iconCustomSize(14)}
                   resizeMode={'contain'}
                 />
-                <Text style={[h1]}> {dataStore?.COMPANY_NAME}</Text>
+                <Text style={[h1, {}]}> {dataStore?.COMPANY_NAME}</Text>
               </View>
-              <View style={[rowCenter, {marginVertical: 7}]}>
-                {/* <Text style={[h2, {color: 'green'}]}>• Online</Text> */}
-                <Text style={{marginLeft: 20}}>{dataStore?.KOTA_NAME}</Text>
-              </View>
+              <Text style={[h5, {color: theme.colors.grey4, marginTop: 5}]}>
+                {
+                  ProductStore?.store?.find(
+                    x => x.COMPANY_ID === dataStore?.COMPANY_ID,
+                  )?.KOTA_NAME
+                }
+              </Text>
             </View>
           </View>
 
           <View style={[rowCenter, {justifyContent: 'space-between'}]}>
             <View style={rowCenter}>
               <View style={[rowCenter]}>
-                <Image source={ic_star} style={iconSize} />
-                <Text style={[h2, {color: '#000'}]}> 5.0</Text>
+                <Image source={ic_star} style={iconCustomSize(13)} />
+                <Text style={[h2, {color: '#000'}]}>
+                  {' '}
+                  {
+                    ProductStore?.store?.find(
+                      x => x.COMPANY_ID === dataStore?.COMPANY_ID,
+                    )?.RATING_STORE
+                  }
+                </Text>
               </View>
 
-              <Text style={{marginLeft: 20}}>Rata Rata Ulasan</Text>
+              <Text style={[h5, {marginLeft: 10}]}>Rata Rata Ulasan</Text>
             </View>
 
             <TouchableOpacity
@@ -288,6 +345,7 @@ const ProductDetailScreen = () => {
                 paddingVertical: 5,
                 borderWidth: 1,
                 borderColor: theme.colors.pink,
+                borderRadius: 5,
               }}
               onPress={() => {
                 let _salon = ProductStore?.store?.find(
@@ -306,15 +364,9 @@ const ProductDetailScreen = () => {
             </TouchableOpacity>
           </View>
 
-          <View
-            style={{
-              borderBottomWidth: 1,
-              borderBottomColor: '#000',
-              marginVertical: 10,
-            }}
-          />
+          <View style={styles.lineHorizontal} />
 
-          <Text style={[h1, {fontSize: 21, marginBottom: 10}]}>
+          <Text style={[h1, {fontSize: 17, marginBottom: 10, marginTop: 20}]}>
             Lainnya Dari Salon Ini
           </Text>
 
@@ -326,24 +378,51 @@ const ProductDetailScreen = () => {
                   style={{
                     width: WINDOW_WIDTH / 2,
                     marginRight: 10,
-                  }}
-                  >
-                  <ProductCard key={i} item={x} func={()=>{
-                    refSv.current?.scrollTo({
-                      y: 0,
-                      animated: true,
-                    });
-                  }} />
+                  }}>
+                  <ProductCard
+                    key={i}
+                    item={x}
+                    func={() => {
+                      refSv.current?.scrollTo({
+                        y: 0,
+                        animated: true,
+                      });
+                    }}
+                  />
                 </TouchableOpacity>
               ))}
           </ScrollView>
         </View>
-        <View style={{marginBottom: 20}}/>
+        <View style={{marginBottom: 20}} />
       </ScrollView>
-
-      <View style={[rowCenter, {justifyContent: 'space-between', marginHorizontal: 10, marginBottom: 10}]}>
-        <Button _theme='pink' onPress={()=> {}} title='CHAT' styleWrapper={{width: '30%'}} />
-        <Button _theme='pink' onPress={()=> checkCart(dataStore)} title='Masukkan Keranjang' styleWrapper={{width: '67%'}} />
+      
+      <View style={[rowCenter]}>
+      <Button
+        _theme="pink"
+        onPress={() => checkCart(dataStore)}
+        title="Chat"
+        styleWrapper={{
+          width: '20%',
+          alignSelf: 'center',
+          // bottom: 10,
+          // right: 0,
+          margin: 10,
+          marginBottom: 20
+        }}
+      />
+      <Button
+        _theme="pink"
+        onPress={() => checkCart(dataStore)}
+        title="Masukkan Keranjang"
+        styleWrapper={{
+          width: '70%',
+          alignSelf: 'center',
+          // bottom: 10,
+          // right: 0,
+          margin: 10,
+          marginBottom: 20
+        }}
+      />
       </View>
     </View>
   );
@@ -373,8 +452,8 @@ const styles = StyleSheet.create({
     width: '60%',
     height: 40,
     justifyContent: 'space-between',
-    padding: 5,
-    borderRadius: 5,
+    paddingHorizontal: 15,
+    borderRadius: 10,
   },
   chatBox: {
     alignItems: 'center',
@@ -384,5 +463,10 @@ const styles = StyleSheet.create({
     borderRadius: 10,
     marginHorizontal: 16,
     marginVertical: 15,
+  },
+  lineHorizontal: {
+    borderBottomWidth: 1,
+    borderBottomColor: theme.colors.grey6,
+    marginVertical: 10,
   },
 });

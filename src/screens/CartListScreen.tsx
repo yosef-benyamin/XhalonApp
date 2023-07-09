@@ -57,7 +57,7 @@ const CartListScreen = () => {
         ),
         trailing: (
           <TouchableOpacity style={{marginRight: 16}}>
-            <Image source={ic_chat} style={iconSize} />
+            <Image source={ic_chat} style={[iconSize, {tintColor: theme.colors.low_pink}]} />
           </TouchableOpacity>
         ),
       }),

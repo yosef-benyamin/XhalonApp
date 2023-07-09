@@ -28,6 +28,8 @@ import {currencyFormat} from 'utils/currencyFormat';
 import Button from 'components/Button';
 import {useFavoriteStore} from 'store/actions/favoritStore';
 import {deleteFavorit} from 'store/effects/favoritStore';
+import ProductCard from 'components/ProductCard';
+import { useProductStore } from 'store/actions/ProductStore';
 
 const FavoriteScreen = () => {
   const navigation = useNavigation();
@@ -37,6 +39,9 @@ const FavoriteScreen = () => {
     getFav();
     return () => {};
   }, []);
+
+  const ProductStore = useProductStore(state => state);
+
 
   const getFav=async()=> {
     setLoader(true)
@@ -80,57 +85,15 @@ const FavoriteScreen = () => {
 
   const renderItem: ListRenderItem<any> = useCallback(
     (item: any) => (
-      <TouchableOpacity
-        style={{
-          elevation: 5,
-          backgroundColor: '#fff',
-          borderRadius: 10,
-        }}>
-        <Image source={img_barber} style={{height: 123, width: '100%'}} />
-        <View
-          style={[
-            // rowCenter,
-            // {justifyContent: 'space-between', alignItems: 'center'},
-          ]}>
-          <View style={{alignItems: 'flex-start', padding: 10}}>
-            <Text style={[h2]}>{item?.PART_NAME}</Text>
-
-            {/* <Image
-              source={ic_stars}
-              style={{width: 50, height: 10}}
-              resizeMode={'contain'}
-            />
-
-            <Text style={[h4, {fontSize: 12}]}>{currencyFormat(40000)}</Text> */}
-            <View
-              style={{
-                width: WINDOW_WIDTH / 4,
-                marginTop: 20,
-                alignSelf: 'flex-start',
-              }}>
-              <Button _theme="pink" title="Kunjungi" onPress={() => {}} />
-            </View>
-          </View>
-
-          <TouchableOpacity
-            onPress={() => handleDeleteFav(item?.PART_ID)}
-            style={{position: 'absolute', bottom: 10, right: 10}}>
-            <Image
-              source={ic_heart}
-              style={[iconSize]}
-              resizeMode={'contain'}
-            />
-          </TouchableOpacity>
-        </View>
-      </TouchableOpacity>
+      <ProductCard item={ProductStore.product.find(x => x.PART_ID === item?.PART_ID)} />
     ),
     [],
   );
 
   return (
-    <View style={{flex: 1, margin: 20}}>
+    <View style={{flex: 1, padding: 20, backgroundColor: '#fff'}}>
       <GridFlatList
-        data={[...(favoriteStore?.listFavorite || [])]}
+        data={favoriteStore.listFavorite}
         // data={[]}
         renderItem={renderItem}
         keyExtractor={(_item, index) => `${index}`}
@@ -139,7 +102,7 @@ const FavoriteScreen = () => {
         }
         numColumns={2}
         style={{
-          backgroundColor: theme.colors.cloud,
+          backgroundColor: theme.colors.white,
           width: '100%',
           alignSelf: 'center',
           margin: 16,

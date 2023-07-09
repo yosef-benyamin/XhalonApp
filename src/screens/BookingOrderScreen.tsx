@@ -1,5 +1,7 @@
 import {
   Alert,
+  Dimensions,
+  FlatList,
   Image,
   ScrollView,
   StyleSheet,
@@ -7,7 +9,7 @@ import {
   TouchableOpacity,
   View,
 } from 'react-native';
-import React, {useEffect, useState} from 'react';
+import React, {useEffect, useRef, useState} from 'react';
 import {
   ic_arrow_left_black,
   ic_barber,
@@ -44,20 +46,25 @@ import {Picker} from '@react-native-picker/picker';
 import appBar from 'components/AppBar/AppBar';
 import {img_barber} from 'assets/images';
 
+
 const OtpVerificationScreen = () => {
   const navigation = useNavigation();
   const [modalVisible, setModalVisible] = useState(false);
   const [selectedBtn, setSelectedBtn] = useState(0);
   const [jam, setJam] = useState('');
-  const [tanggal, setTanggal] = useState('');
-  const [bookingType, setBookingType] = useState<'TO HOME' | 'TO SALON'>('TO SALON');
-  
+  const [tanggal, setTanggal] = useState(
+    moment(new Date()).format('YYYY-MM-DD').toString(),
+  );
+  const [bookingType, setBookingType] = useState<'TO HOME' | 'TO SALON'>(
+    'TO SALON',
+  );
+
   useEffect(() => {
     navigation.setOptions(
       appBar({
         leading: (
           <TouchableOpacity
-            style={rowCenter}
+            style={[rowCenter]}
             onPress={() => navigation.goBack()}>
             <Image
               source={ic_arrow_left_black}
@@ -67,7 +74,7 @@ const OtpVerificationScreen = () => {
                 marginLeft: 16,
               }}
             />
-            <Text style={[h1, {color: '#000', marginLeft: 10}]}>
+            <Text style={[h1, {color: '#000', marginLeft: 10, fontSize: 14}]}>
               Booking Pesanan
             </Text>
           </TouchableOpacity>
@@ -76,89 +83,188 @@ const OtpVerificationScreen = () => {
     );
   }, [navigation]);
 
+  const generateDateRange = (startDate: Date, endDate: Date) => {
+    const dates = [];
+    let currentDate = new Date(startDate);
+
+    while (currentDate <= endDate) {
+      dates.push(currentDate.toISOString().split('T')[0]);
+      currentDate.setDate(currentDate.getDate() + 1);
+    }
+
+    return dates;
+  };
+
+  const [dateRange, setDateRange] = useState([]);
+  const [monthRange, setMonthRange] = useState<
+    {date: string; month: string; year: string}[]
+  >([]);
+  // Generate the date range from '2023-01-01' to '2023-12-31'
+
+  useEffect(() => {
+    const startDate = new Date();
+    const endDate = new Date('2024-12-31');
+    let _dateRange = generateDateRange(startDate, endDate);
+    // console.log('_dateRange = ', _dateRange)
+    setDateRange(_dateRange);
+
+    const monthlyData = {};
+
+    _dateRange.forEach(date => {
+      const [year, month] = date.split('-');
+      const key = `${month}-${year}`;
+
+      if (!monthlyData[key]) {
+        monthlyData[key] = [];
+      }
+
+      monthlyData[key].push(date);
+    });
+
+    // Convert the monthly data to an array of objects
+    const monthlyDataArray = Object.entries(monthlyData).map(
+      ([key, dates]) => ({
+        month: key.split('-')[0],
+        year: key.split('-')[1],
+        date: dates[0], // Take the first date of the month
+      }),
+    );
+    setMonthRange(monthlyDataArray);
+    // console.log('monthlyDataArray = ', monthlyDataArray);
+
+    return () => {};
+  }, []);
+
   return (
-    <View style={{flex: 1, padding: 10}}>
+    <View style={{flex: 1, backgroundColor: '#fff', padding: 16}}>
       <ScrollView>
-        <Text
+        {/* {dateRange.map((date, index) => (
+        <Text key={index}>{date}</Text>
+      ))} */}
+
+        {/* <Text
           style={[h1, {textAlign: 'center', fontSize: 24, marginVertical: 5}]}>
           Pilih Jadwal Pesanan
-        </Text>
+        </Text> */}
 
         <ReactNativeModernDatepicker
           options={{
-            backgroundColor: '#C0226D',
-            textSecondaryColor: '#fff',
-            textDefaultColor: '#fff',
-            selectedTextColor: '#fff',
+            backgroundColor: theme.colors.white,
+            textSecondaryColor: theme.colors.pink,
+            textDefaultColor: theme.colors.pink,
+            selectedTextColor: theme.colors.white,
+            textHeaderColor: theme.colors.pink,
+            borderColor: theme.colors.grey6,
+            mainColor: theme.colors.low_pink,
           }}
-          mode='datepicker'
-
+          locale="ID"
+          mode="calendar"
+          minimumDate={moment(new Date()).format('YYYY-MM-DD').toString()}
+          selected={moment(new Date()).format('YYYY-MM-DD').toString()}
           style={{
             width: WINDOW_WIDTH - 50,
             alignSelf: 'center',
             borderRadius: 10,
           }}
-          onDateChange={(x)=> setTanggal(x)}
+          onDateChange={x => {
+            console.log('selected date = ', x);
+            setTanggal(x);
+          }}
         />
 
-        <Text style={[h1, {marginVertical: 10}]}>Jam Tersedia</Text>
+        <Text style={[h1, {marginVertical: 10, fontSize: 13}]}>
+          Jam Tersedia
+        </Text>
 
         <View style={[rowCenter, {justifyContent: 'space-between'}]}>
-          <Text style={{width: '10%'}}>Pagi</Text>
-          {/* <Text style={styles.boxText}>10:00 AM</Text>
-          <Text style={styles.boxText}>11:00 AM</Text> */}
+          {/* <Text style={[h3, {width: '10%', fontSize: 15}]}>Pagi</Text> */}
 
           {['10:00', '11:00', '11:30'].map((x, i) => (
-            <Text
-              onPress={() => setJam(x)}
+            <TouchableOpacity
               key={i}
               style={[
                 styles.boxText,
                 {
-                  backgroundColor: jam === x ? theme.colors.pink : '#fff',
-                  color: jam === x ? '#fff' : '#000',
+                  backgroundColor: jam === x ? theme.colors.low_pink : '#fff',
+                  borderWidth: 1,
+                  borderColor:
+                    jam === x ? theme.colors.low_pink : theme.colors.grey6,
                 },
-              ]}>
-              {x}
-            </Text>
+              ]}
+              onPress={() => setJam(x)}>
+              <Text
+                style={[
+                  h1,
+                  {
+                    color:
+                      jam === x ? theme.colors.white : theme.colors.low_pink,
+                  },
+                ]}>
+                {x}
+              </Text>
+            </TouchableOpacity>
           ))}
         </View>
         <View
           style={[
             rowCenter,
-            {justifyContent: 'space-between', marginVertical: 20},
+            {justifyContent: 'space-between', marginVertical: 10},
           ]}>
-          <Text style={{width: '10%'}}>Siang</Text>
+          {/* <Text style={[h3, {width: '10%', fontSize: 15}]}>Siang</Text> */}
+
           {['12:00', '13:00', '14:00'].map((x, i) => (
-            <Text
-              onPress={() => setJam(x)}
+            <TouchableOpacity
               key={i}
               style={[
                 styles.boxText,
                 {
-                  backgroundColor: jam === x ? theme.colors.pink : '#fff',
-                  color: jam === x ? '#fff' : '#000',
+                  backgroundColor: jam === x ? theme.colors.low_pink : '#fff',
+                  borderWidth: 1,
+                  borderColor:
+                    jam === x ? theme.colors.low_pink : theme.colors.grey6,
                 },
-              ]}>
-              {x}
-            </Text>
+              ]}
+              onPress={() => setJam(x)}>
+              <Text
+                style={[
+                  h1,
+                  {
+                    color:
+                      jam === x ? theme.colors.white : theme.colors.low_pink,
+                  },
+                ]}>
+                {x}
+              </Text>
+            </TouchableOpacity>
           ))}
         </View>
         <View style={[rowCenter, {justifyContent: 'space-between'}]}>
-          <Text style={{width: '10%'}}>Sore</Text>
+          {/* <Text style={[h3, {width: '12%', fontSize: 15}]}>Sore</Text> */}
+
           {['17:00', '17:30', '18:00'].map((x, i) => (
-            <Text
-              onPress={() => setJam(x)}
+            <TouchableOpacity
               key={i}
               style={[
                 styles.boxText,
                 {
-                  backgroundColor: jam === x ? theme.colors.pink : '#fff',
-                  color: jam === x ? '#fff' : '#000',
+                  backgroundColor: jam === x ? theme.colors.low_pink : '#fff',
+                  borderWidth: 1,
+                  borderColor:
+                    jam === x ? theme.colors.low_pink : theme.colors.grey6,
                 },
-              ]}>
-              {x}
-            </Text>
+              ]}
+              onPress={() => setJam(x)}>
+              <Text
+                style={[
+                  h1,
+                  {
+                    color:
+                      jam === x ? theme.colors.white : theme.colors.low_pink,
+                  },
+                ]}>
+                {x}
+              </Text>
+            </TouchableOpacity>
           ))}
         </View>
 
@@ -179,20 +285,36 @@ const OtpVerificationScreen = () => {
           style={[rowCenter, {justifyContent: 'space-between', marginTop: 20}]}>
           <TouchableOpacity
             style={
-              bookingType !== 'TO SALON' ? styles.activeButton : styles.inactiveButton
+              bookingType !== 'TO SALON'
+                ? styles.activeButton
+                : styles.inactiveButton
             }
             onPress={() => setBookingType('TO SALON')}>
-            <Text style={bookingType !== 'TO SALON' ? {color: '#000'} : {color: '#fff'}}>
+            <Text
+              style={[
+                h1,
+                bookingType !== 'TO SALON'
+                  ? {color: theme.colors.low_pink}
+                  : {color: '#fff'},
+              ]}>
               Datang Ke Salon
             </Text>
           </TouchableOpacity>
 
           <TouchableOpacity
             style={
-              bookingType !== 'TO HOME' ? styles.activeButton : styles.inactiveButton
+              bookingType !== 'TO HOME'
+                ? styles.activeButton
+                : styles.inactiveButton
             }
             onPress={() => setBookingType('TO HOME')}>
-            <Text style={bookingType !== 'TO HOME' ? {color: '#000'} : {color: '#fff'}}>
+            <Text
+              style={[
+                h1,
+                bookingType !== 'TO HOME'
+                  ? {color: theme.colors.low_pink}
+                  : {color: '#fff'},
+              ]}>
               Booking Ke Rumah
             </Text>
           </TouchableOpacity>
@@ -200,15 +322,14 @@ const OtpVerificationScreen = () => {
 
         <Button
           _theme="pink"
-          disabled={(!tanggal || !jam || !bookingType)}
+          disabled={!tanggal || !jam || !bookingType}
           title="Lanjutkan"
           onPress={() => {
             console.log('tanggal = ', tanggal);
 
             navigation.navigate('FormBookingOrder', {
-              BOOKING_DATE: tanggal.toString().replace(/\//g, "-") + ' '+ jam,
+              BOOKING_DATE: tanggal.toString().replace(/\//g, '-') + ' ' + jam,
               BOOKING_TYPE: bookingType,
-
             });
           }}
           styleWrapper={{
@@ -220,21 +341,30 @@ const OtpVerificationScreen = () => {
   );
 };
 
+const SCREEN_WIDTH = Dimensions.get('screen').width - 20;
+
 export default OtpVerificationScreen;
 
 const styles = StyleSheet.create({
-  boxText: {paddingHorizontal: 10, paddingVertical: 5, backgroundColor: '#fff'},
+  boxText: {
+    paddingHorizontal: WINDOW_WIDTH / 10,
+    paddingVertical: 8,
+    backgroundColor: '#fff',
+    borderRadius: 5,
+  },
   activeButton: {
-    elevation: 4,
+    // elevation: 4,
     backgroundColor: '#fff',
     padding: 10,
     borderRadius: 8,
     width: '45%',
     alignItems: 'center',
+    borderWidth: 1,
+    borderColor: theme.colors.grey6,
   },
   inactiveButton: {
-    elevation: 4,
-    backgroundColor: '#C0226D',
+    // elevation: 4,
+    backgroundColor: theme.colors.low_pink,
     padding: 10,
     borderRadius: 8,
     width: '45%',

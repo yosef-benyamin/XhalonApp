@@ -3,6 +3,7 @@ import {StyleSheet, View} from 'react-native';
 import {colors} from 'theme/colors';
 import {boxShadow} from 'utils/mixins';
 import TabItem from './TabItem';
+import { theme } from 'utils';
 
 const BottomNavigator = ({state, descriptors, navigation}) => {
   return (
@@ -61,6 +62,6 @@ const styles = StyleSheet.create({
   container: {
     flexDirection: 'row',
     paddingVertical: 12,
-    backgroundColor: colors.white,
+    backgroundColor: theme.colors.pink,
   },
 });

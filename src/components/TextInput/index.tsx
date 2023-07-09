@@ -73,11 +73,11 @@ const CustomTextInput = ({
 
   return (
     <View>
-      {title && <Text style={[styles.title, h1, styleTitle]}>{title}</Text>}
+      {title && <Text style={[h1, styles.title, styleTitle]}>{title}</Text>}
       <View
         style={[
           styles.inputWrapper,
-          {borderColor: errorMessage ? theme.colors.red : theme.colors.grey5},
+          {borderColor: errorMessage ? theme.colors.red : theme.colors.low_pink},
         ]}>
         {leftIcon && (
           <Image source={leftIcon} style={[iconSize, {marginRight: 10}]} />
@@ -112,11 +112,12 @@ export default CustomTextInput;
 const styles = StyleSheet.create({
   inputWrapper: {
     borderWidth: 1,
+    borderColor: theme.colors.low_pink,
     padding: 10,
     flexDirection: 'row',
     alignItems: 'center',
     borderRadius: radius.s,
-    marginTop: 12,
+    marginTop: 5,
   },
   input: {
     width: '95%',
@@ -129,6 +130,7 @@ const styles = StyleSheet.create({
   },
   title: {
     fontSize: FONT_SIZE_12,
+    color: theme.colors.grey3
   },
   textError: {
     fontSize: FONT_SIZE_12,

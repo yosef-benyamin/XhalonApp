@@ -18,7 +18,7 @@ const theme = {
     blue: '#0085FF',
     red: '#EA2626',
     pink: '#C0226D',
-    low_pink: '#DDBDCC',
+    low_pink: '#f8a0a9',
     windowBg: '#FFFFFF',
     navBar: {
       titleColor: '#212121',
@@ -33,7 +33,7 @@ const theme = {
   },
   Text: {
     style: {
-      fontFamily: 'Inter',
+      fontFamily: 'BreeSerif-Regular',
     },
   },
 };

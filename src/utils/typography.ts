@@ -20,7 +20,8 @@ export const FONT_SIZE_12 = scaleFont(12);
 export const FONT_SIZE_10 = scaleFont(10);
 
 export const FONT_SIZE_BIGGER = scaleFont(16);
-export const FONT_SIZE_NORMAL = scaleFont(15);
+// export const FONT_SIZE_NORMAL = scaleFont(15);
+export const FONT_SIZE_NORMAL = scaleFont(12);
 export const FONT_SIZE_SMALLER = scaleFont(12);
 export const FONT_SIZE_SMALLEST = scaleFont(10);
 

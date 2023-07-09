@@ -10,7 +10,7 @@ import React from 'react';
 import {ic_menu, ic_cart, ic_chat, ic_search} from 'assets/icons';
 import {theme} from 'utils';
 import {rowCenter, iconCustomSize, WINDOW_WIDTH} from 'utils/mixins';
-import {h1} from 'utils/styles';
+import {h1, h5} from 'utils/styles';
 import {useNavigation} from '@react-navigation/native';
 import {useDrawerStore} from 'store/effects/drawerStore';
 import {useCartStore} from 'store/actions/cartStore';
@@ -31,19 +31,25 @@ const MainHeader = () => {
             }}>
             <Image
               source={ic_menu}
-              style={[iconCustomSize(30), {borderRadius: 4}]}
+              style={[iconCustomSize(35), {borderRadius: 4}]}
             />
           </TouchableOpacity>
-          <Text style={[h1, {fontSize: 15, color: '#fff', marginLeft: 10}]}>
+          {/* <Text style={[h1, {fontSize: 15, color: '#fff', marginLeft: 10}]}>
             MENU
-          </Text>
+          </Text> */}
         </View>
 
         <View style={[rowCenter]}>
           <TouchableOpacity onPress={() => navigation.navigate('CartList')}>
             <Image
               source={ic_cart}
-              style={[iconCustomSize(30), {marginRight: 10, borderRadius: 4}]}
+              style={[
+                iconCustomSize(35),
+                {
+                  marginRight: 20,
+                  borderRadius: 4,
+                },
+              ]}
             />
 
             <View style={styles.ballCart}>
@@ -58,18 +64,23 @@ const MainHeader = () => {
           </TouchableOpacity>
           <Image
             source={ic_chat}
-            style={[iconCustomSize(30), {borderRadius: 4}]}
+            style={[iconCustomSize(35), {borderRadius: 4}]}
           />
         </View>
       </View>
 
-      <View style={[rowCenter, styles.searchWrapper]}>
-        <TextInput placeholder="Pencarian Salon & produk" />
+      <TouchableOpacity
+        onPress={() => navigation.navigate('Search')}
+        style={[rowCenter, styles.searchWrapper]}>
+        <Text style={[h5, {color: '#666', fontSize: 16}]}>Pencarian Salon & Produk</Text>
         <Image
           source={ic_search}
-          style={[iconCustomSize(30), {borderRadius: 4}]}
+          style={[
+            iconCustomSize(25),
+            {borderRadius: 4, marginRight: 10, tintColor: theme.colors.grey4},
+          ]}
         />
-      </View>
+      </TouchableOpacity>
     </View>
   );
 };
@@ -78,11 +89,14 @@ export default MainHeader;
 
 const styles = StyleSheet.create({
   searchWrapper: {
-    backgroundColor: '#fff',
+    // backgroundColor: '#fff',
     marginTop: 20,
     borderRadius: 10,
-    padding: 5,
+    width: '100%',
     justifyContent: 'space-between',
+    padding: 15,
+    backgroundColor: theme.colors.grey7,
+    // justifyContent: 'space-between',
   },
   headerWrapper: {
     backgroundColor: theme.colors.pink,
@@ -132,7 +146,7 @@ const styles = StyleSheet.create({
     height: 20,
     width: 20,
     top: -10,
-    right: 5,
+    right: 10,
     elevation: 4,
     alignItems: 'center',
     justifyContent: 'center',

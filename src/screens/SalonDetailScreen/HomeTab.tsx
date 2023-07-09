@@ -13,18 +13,19 @@ import {currencyFormat} from 'utils/currencyFormat';
 import {theme} from 'utils';
 import HomeItemCard from './ItemCard';
 import { useProductStore } from 'store/actions/ProductStore';
+import ProductCard from 'components/ProductCard';
 
 const HomeTab = ({COMPANY_ID}: {COMPANY_ID: string}) => {
   const ProductStore = useProductStore((state) => state);
   
   return (
     <View>
-      <Text style={[h1]}>PROMO FLASHSALE</Text>
+      <Text style={[h1, {fontSize: 13, marginVertical: 10}]}>Produk Toko</Text>
 
       <View>
         <ScrollView horizontal>
           {[...ProductStore?.product].map((x, i) => (
-            <HomeItemCard key={i} data={{...x, COMPANY_ID: COMPANY_ID}} />
+            <ProductCard item={x} />
           ))}
         </ScrollView>
       </View>

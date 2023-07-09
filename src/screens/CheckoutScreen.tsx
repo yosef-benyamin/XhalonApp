@@ -2,6 +2,7 @@ import {
   Alert,
   Image,
   Linking,
+  Platform,
   ScrollView,
   StyleSheet,
   Text,
@@ -23,7 +24,7 @@ import {
   ic_pinpoin,
   ic_voucher,
 } from 'assets/icons';
-import {h1, h2, h3, h4} from 'utils/styles';
+import {h1, h2, h3, h4, h5} from 'utils/styles';
 import {theme} from 'utils';
 import AllCart from 'components/CartListComponents/AllCart';
 import {img_hair} from 'assets/images';
@@ -87,12 +88,17 @@ const CartListScreen = () => {
                 marginLeft: 16,
               }}
             />
-            <Text style={[h1, {color: '#000', marginLeft: 10}]}>Checkout</Text>
+            <Text style={[h1, {color: '#000', marginLeft: 10, fontSize: 14}]}>
+              Checkout
+            </Text>
           </TouchableOpacity>
         ),
         trailing: (
           <TouchableOpacity style={{marginRight: 16}}>
-            <Image source={ic_chat} style={iconSize} />
+            <Image
+              source={ic_chat}
+              style={[iconSize, {tintColor: theme.colors.low_pink}]}
+            />
           </TouchableOpacity>
         ),
       }),
@@ -168,18 +174,15 @@ const CartListScreen = () => {
   const handleInputChange2 = async (text: string) => {
     // Lakukan sesuatu dengan nilai teks yang diubah
     console.log(text);
-    setVoucher(text);
+    setVoucher(text?.toUpperCase());
   };
 
-
-  if(loader) {
-    return (
-      <Loading/>
-    )
+  if (loader) {
+    return <Loading />;
   }
 
   return (
-    <View style={{flex: 1, padding: 16}}>
+    <View style={{flex: 1, padding: 16, backgroundColor: '#fff'}}>
       <ScrollView>
         <Text>Alamat Salon Yang Di Pesan</Text>
         <View
@@ -191,12 +194,16 @@ const CartListScreen = () => {
               marginTop: 10,
             },
           ]}>
-          <Image source={ic_pinpoin} style={iconSize} resizeMode={'contain'} />
+          <Image
+            source={ic_pinpoin}
+            style={iconCustomSize(14)}
+            resizeMode={'contain'}
+          />
           <Text> {cartStore?.list_order?.ORDER_ADDRESS}</Text>
         </View>
         <View style={styles.lineHorizontal} />
 
-        <Text style={[h1, {fontSize: 15}]}>
+        <Text style={[h1, {fontSize: 13}]}>
           {
             store?.find(x => x.COMPANY_ID === cartStore?.cart?.COMPANY_ID)
               ?.COMPANY_NAME
@@ -216,15 +223,23 @@ const CartListScreen = () => {
             <View style={rowCenter}>
               <Image
                 source={{uri: BASE_URL + '/' + x?.MAIN_IMAGE}}
-                style={{width: 165, height: 109}}
+                style={{width: 70, height: 70, borderRadius: 10}}
               />
 
               <View style={{marginLeft: 10}}>
-                <Text style={[h1, {fontSize: 20}]}>Catok</Text>
-                <Text style={[h3, {fontSize: 15, marginVertical: 15}]}>
+                <Text style={[h1, {fontSize: 15}]}>Catok</Text>
+                <Text
+                  style={[
+                    h3,
+                    {
+                      fontSize: 12,
+                      marginVertical: 10,
+                      color: theme.colors.grey4,
+                    },
+                  ]}>
                   Kategori {x?.KET_ANALISA_GLOBAL}
                 </Text>
-                <Text style={[h3, {fontSize: 15, color: theme.colors.pink}]}>
+                <Text style={[h1, {fontSize: 15, color: theme.colors.pink}]}>
                   {currencyFormat(x?.UNIT_PRICE)}
                 </Text>
               </View>
@@ -250,7 +265,7 @@ const CartListScreen = () => {
           </Text>
         </View> */}
 
-        <View style={styles.lineHorizontal} />
+        {/* <View style={styles.lineHorizontal} /> */}
 
         <View style={[rowCenter, {marginBottom: 10}]}>
           <Image
@@ -278,10 +293,10 @@ const CartListScreen = () => {
             {moment(cartStore?.list_order?.BOOKING_DATE).format('HH:mm')}
           </Text>
         </View>
-        <View style={[rowCenter, {justifyContent: 'space-between'}]}>
+        {/* <View style={[rowCenter, {justifyContent: 'space-between'}]}>
           <Text>Pilihan Trapies</Text>
           <Text>Abdul</Text>
-        </View>
+        </View> */}
 
         <View style={styles.lineHorizontal} />
 
@@ -296,12 +311,18 @@ const CartListScreen = () => {
         </View>
 
         <View style={styles.lineHorizontal} />
-        <Text style={[h1]}>Metode Pemesanan</Text>
-        <View style={styles.lineHorizontal} />
+        {/* <Text style={[h1]}>Metode Pemesanan</Text>
+        <View style={styles.lineHorizontal} /> */}
 
-        <TouchableOpacity style={styles.btnPink}>
-          <Text>{cartStore.list_order?.BOOKING_TYPE}</Text>
-        </TouchableOpacity>
+        <View style={{}}>
+          <View style={[rowCenter, {justifyContent: 'space-between'}]}>
+            <Text style={[h5, {fontSize: 14}]}>Metode Pemesanan</Text>
+            <Text style={[h1, {color: theme.colors.pink}]}>
+              {cartStore?.list_order?.BOOKING_TYPE}
+            </Text>
+          </View>
+          {/* <View style={styles.lineHorizontal} /> */}
+        </View>
 
         <View style={styles.lineHorizontal} />
 
@@ -318,6 +339,7 @@ const CartListScreen = () => {
             onChange={handleInputChange2}
             debounceTime={1500}
             placeholder={'silahkan ketik voucher...'}
+            // value={voucher}
           />
         </View>
         {/* <View style={styles.lineHorizontal} /> */}
@@ -371,17 +393,22 @@ const CartListScreen = () => {
           <Text>Diskon</Text>
           <Text>{currencyFormat(cartStore.list_order?.DISC_VAL)}</Text>
         </View>
-        {/* <View style={[rowCenter, {justifyContent: 'space-between'}]}>
+
+        <View
+          style={[
+            rowCenter,
+            {justifyContent: 'space-between', marginBottom: 10},
+          ]}>
           <Text>Biaya Layanan</Text>
           <Text>{currencyFormat(9999)}</Text>
-        </View> */}
-        <View
+        </View>
+        {/* <View
           style={[rowCenter, {justifyContent: 'space-between', marginTop: 10}]}>
           <Text style={[h3, {fontSize: 16}]}>Total Pembayaran</Text>
           <Text style={{color: theme.colors.pink}}>
             {currencyFormat(cartStore.list_order?.NETTO_VAL)}
           </Text>
-        </View>
+        </View> */}
       </ScrollView>
 
       <View
@@ -392,7 +419,7 @@ const CartListScreen = () => {
         }}>
         <View style={{alignItems: 'flex-end', marginRight: 10}}>
           <Text>Total Pembayaran</Text>
-          <Text style={{color: theme.colors.pink, fontWeight: '700'}}>
+          <Text style={[h1, {color: theme.colors.pink, fontSize: 17}]}>
             {currencyFormat(cartStore.list_order?.NETTO_VAL)}
           </Text>
         </View>
@@ -415,13 +442,18 @@ const CartListScreen = () => {
               let resPayment: any = await cartStore?.paymentOrder(dataPayment);
               setLoader(false);
               try {
-                Linking.openURL(resPayment?.redirect_url);
+                // Linking.openURL(resPayment?.redirect_url);
+                navigation.navigate('Payment', {url: resPayment?.redirect_url});
+                cartStore.deleteAllCart();
               } catch (error) {
-                Alert.alert('PERINGATAN', 'Terjadi kesalahan, silahkan hubungi CS')
+                Alert.alert(
+                  'PERINGATAN',
+                  'Terjadi kesalahan, silahkan hubungi CS',
+                );
               }
             }
 
-            navigation.navigate('PaymentSuccess');
+            // navigation.navigate('PaymentSuccess');
           }}
           styleWrapper={{width: '50%'}}
         />
@@ -451,17 +483,19 @@ const DebouncedTextInput = ({
   }, [text, onChange, debounceTime]);
 
   const handleChangeText = (inputText: string) => {
-    setText(inputText);
+    setText(inputText?.toUpperCase());
   };
 
   return (
     <TextInput
       onChangeText={handleChangeText}
       value={text}
+      autoCapitalize="characters"
       {...restProps}
       placeholder={placeholder}
       maxLength={50}
       multiline
+      keyboardType={Platform.OS === 'ios' ? 'default' : 'visible-password'}
     />
   );
 };

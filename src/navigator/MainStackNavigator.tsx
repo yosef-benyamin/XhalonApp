@@ -30,6 +30,10 @@ import {useAuthStore} from 'store/actions/AuthStore';
 import {AuthState} from 'types/auth.types';
 import { RootStackParamList } from 'types/navigator';
 import ProductDetailScreen from 'screens/SalonDetailScreen/ProductDetail';
+import PaymentScreen from 'screens/PaymentScreen';
+import SearchScreen from 'screens/SearchScreen';
+import TransactionDetailScreen from 'screens/TransactionDetailScreen';
+import OrderStatusScreen from 'screens/OrderStatusScreen';
 
 const RootStack = createStackNavigator<RootStackParamList>();
 
@@ -103,6 +107,10 @@ const MainStack: React.FC = () => {
                 />
                 <RootStack.Screen name="MainTab" component={MainTab} />
                 <RootStack.Screen name="CartList" component={CartListScreen} />
+                <RootStack.Screen name="Payment" component={PaymentScreen} />
+                <RootStack.Screen name="Search" component={SearchScreen} />
+                <RootStack.Screen name="TransactionDetail" component={TransactionDetailScreen} />
+                <RootStack.Screen name="OrderStatus" component={OrderStatusScreen} />
               </>
             )}
           </>

@@ -109,3 +109,44 @@ export interface Banners {
     SORT_ORDER: null;
 
 }
+
+export interface IHistory {
+    TOTAL_PAGE: number;
+    TOTAL_RECORD: number;
+    ROW_NUMBER: number;
+    COMPANY_ID: string;
+    CURRENCY_ID: string;
+    SALES_ID: string;
+    SALES_DATE: string;
+    BOOKING_TYPE: string;
+    BOOKING_DATE: string;
+    BOOKING_DATE_BEFORE: string | null;
+    BRUTO_VAL: number;
+    DISC_PCT: number;
+    DISC_VAL: number;
+    PPN_PCT: number;
+    PPN_VAL: number;
+    DELIVERYCOST_VAL: number;
+    NETTO_VAL: number;
+    NOTE: string;
+    STATUS_ID: string;
+    STATUS_ID_DESC: string;
+    STATUS_CATEGORY: string;
+    STATUS_LAST_DATE: string | null;
+    SETTLE_PAYMENT_METHOD: string;
+    SETTLE_PAYMENT_VAL: number;
+    PAYMENT_ID: string | null;
+    PAYMENT_VAL: number;
+    PAYMENT_BILL_VAL: number;
+    ORDER_ADDRESS: string;
+    ORDER_KELURAHAN_ID: string;
+    ORDER_POINT: string;
+    ORDER_DISTANCE: number;
+    SOURCE_ID: string;
+    STORE_IS_HOME_VISIT: boolean;
+    STORE_MAP_LOCATION: string | null;
+    STORE_OPERATIONAL_DAY: string;
+    STORE_OPERATIONAL_HOUR: string;
+    STORE_KECAMATAN_ID: string;
+    CREATEDATE: string;
+}

@@ -86,8 +86,8 @@ const Drawer = () => {
       <View style={[rowCenter, styles.bottom]}>
         {/* <Image source={ic_wa} style={iconSize} /> */}
         <View style={{marginLeft: 10}}>
-          <Text>Whatsapp CS MSGLOW</Text>
-          <Text style={h1}>0811 9999 9999</Text>
+          <Text>Whatsapp CS XHALONA</Text>
+          <Text style={h1}>081111111111</Text>
         </View>
       </View>
     </View>

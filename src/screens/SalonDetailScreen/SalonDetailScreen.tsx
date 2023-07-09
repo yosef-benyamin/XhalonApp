@@ -12,16 +12,19 @@ import {
   ic_arrow_left_black,
   ic_burgermenu,
   ic_cart,
+  ic_chat,
   ic_crown,
   ic_glasses,
+  ic_menu,
   ic_pinpoin,
   ic_star,
   ic_stars,
+  ic_store_active,
 } from 'assets/icons';
-import {iconSize, rowCenter} from 'utils/mixins';
+import {iconCustomSize, iconSize, rowCenter} from 'utils/mixins';
 import {theme} from 'utils';
 import {img_barber} from 'assets/images';
-import {h1, h2} from 'utils/styles';
+import {h1, h2, h3, h5} from 'utils/styles';
 import TopNavigation from './TopNavigation';
 import {RouteProp, useNavigation, useRoute} from '@react-navigation/native';
 import {RootStackParamList} from 'types/navigator';
@@ -52,27 +55,26 @@ const SalonDetailScreen = () => {
   if(isLoading) return <Loading/>
 
   return (
-    <View style={{flex: 1}}>
+    <View style={{flex: 1, backgroundColor: '#fff'}}>
       <View style={[rowCenter, styles.header]}>
-        <TouchableOpacity style={styles.whiteBox}>
-          <Image source={ic_arrow_left_black} style={[iconSize]} />
+        <TouchableOpacity style={styles.whiteBox} onPress={()=> navigation.goBack()}>
+          <Image source={ic_arrow_left_black} style={[iconCustomSize(17)]} resizeMode='stretch' />
         </TouchableOpacity>
 
-        <View style={[rowCenter, styles.searchBox]}>
-          <TextInput
-            placeholder="Pencarian Produk"
-            style={{width: '50%', fontSize: 12, padding: 2}}
-          />
-          <Image source={ic_glasses} style={iconSize} />
-        </View>
+        <TouchableOpacity style={[rowCenter, styles.searchBox]} onPress={()=> navigation.navigate('Search')}>
+          <Text style={[h5, {fontSize:12}]}>Pencarian Produk</Text>
+          <Image source={ic_glasses} style={[iconCustomSize(14)]} />
+        </TouchableOpacity>
         <TouchableOpacity style={styles.whiteBox} onPress={()=> navigation.navigate('CartList')}>
-          <Image source={ic_cart} style={iconSize} />
+          <Image source={ic_cart} style={[iconSize, {tintColor: theme.colors.low_pink}]} />
         </TouchableOpacity>
 
         <TouchableOpacity style={styles.whiteBox}>
-          <Image source={ic_burgermenu} style={iconSize} />
+          <Image source={ic_chat} style={[iconSize, {tintColor: theme.colors.low_pink}]} />
         </TouchableOpacity>
       </View>
+
+
 
       <ScrollView>
         <View style={[rowCenter, {margin: 16}]}>
@@ -84,24 +86,24 @@ const SalonDetailScreen = () => {
           <View style={[{marginLeft: 10}]}>
             <View style={rowCenter}>
               <Image
-                source={ic_crown}
+                source={ic_store_active}
                 style={iconSize}
                 resizeMode={'contain'}
               />
-              <Text style={[h1]}> {dataStore?.COMPANY_NAME}</Text>
+              <Text style={[h1,{ marginLeft: 5}]}> {dataStore?.COMPANY_NAME}</Text>
             </View>
             <View style={[rowCenter, {marginVertical: 7}]}>
               {/* <Text style={[h2, {color: 'green'}]}>• Online</Text> */}
-              <Text style={{marginLeft: 20}}>{dataStore?.KOTA_NAME}</Text>
+              <Text style={[h5, {marginLeft: 0}]}>{dataStore?.KOTA_NAME}</Text>
             </View>
 
             <View style={rowCenter}>
               <View style={[rowCenter]}>
-                <Image source={ic_star} style={iconSize} />
-                <Text style={[h2, {color: '#000'}]}> 5.0</Text>
+                <Image source={ic_star} style={[iconSize, {}]} />
+                <Text style={[h2, {color: theme.colors.grey3}]}> {dataStore?.RATING_STORE}</Text>
               </View>
 
-              <Text style={{marginLeft: 20}}>Rata Rata Ulasan</Text>
+              <Text style={[h2, {color: theme.colors.grey3, marginLeft: 10}]}> {'rata rata ulasan'}</Text>
             </View>
           </View>
         </View>
@@ -111,19 +113,19 @@ const SalonDetailScreen = () => {
           <View style={[rowCenter, {marginVertical: 10}]}>
             <Image
               source={ic_pinpoin}
-              style={iconSize}
+              style={[iconCustomSize(12)]}
               resizeMode={'contain'}
             />
-            <Text> {dataStore?.ADDRESS}</Text>
+            <Text style={[h3]}> {dataStore?.ADDRESS}</Text>
           </View>
-          <View style={[rowCenter]}>
+          {/* <View style={[rowCenter]}>
             <Image
               source={ic_stars}
               style={{height: 20, width: 100}}
               resizeMode={'contain'}
             />
-            <Text>(3.2) 65 Reviews...</Text>
-          </View>
+            <Text>({dataStore.RATING_STORE}) 65 Reviews...</Text>
+          </View> */}
         </View>
 
         <View
@@ -155,11 +157,11 @@ export default SalonDetailScreen;
 const styles = StyleSheet.create({
   header: {
     justifyContent: 'space-between',
-    backgroundColor: theme.colors.pink,
+    // backgroundColor: theme.colors.pink,
     padding: 10,
-    paddingBottom: 60,
-    borderBottomRightRadius: 40,
-    borderBottomLeftRadius: 40,
+    paddingBottom: 20,
+    // borderBottomRightRadius: 40,
+    // borderBottomLeftRadius: 40,
   },
   whiteBox: {
     height: 40,
@@ -170,12 +172,12 @@ const styles = StyleSheet.create({
     borderRadius: 10,
   },
   searchBox: {
-    backgroundColor: '#fff',
+    backgroundColor: theme.colors.grey7,
     width: '60%',
     height: 40,
     justifyContent: 'space-between',
-    padding: 5,
-    borderRadius: 5,
+    paddingHorizontal: 15,
+    borderRadius: 20,
   },
   chatBox: {
     alignItems: 'center',

@@ -1,15 +1,22 @@
 import {RouteProp} from '@react-navigation/native';
 import {StackNavigationProp} from '@react-navigation/stack';
-import { IProduct, IStore } from './products.types';
+import { IHistory, IProduct, IStore } from './products.types';
 
 type RootStackParamList = {
   MainTab?: RootTabParamList;
   Login: undefined;
+  Search: undefined;
   Auth: undefined;
   Register: undefined;
   RegisterPassword: undefined;
   ForgotPassword: undefined;
   ResetPassword: undefined;
+  OrderStatus: {
+    SALES_ID: string;
+  };
+  Payment: {
+    url: string;
+  }
   SalonDetail: {
     dataStore: IStore;
   },
@@ -18,6 +25,9 @@ type RootStackParamList = {
   },
   CartList: undefined;
   Checkout: undefined;
+  TransactionDetail: {
+    item: IHistory;
+  };
   PaymentSuccess: undefined;
   FormBookingOrder: {
     BOOKING_DATE: string;

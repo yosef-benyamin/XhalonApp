@@ -127,6 +127,7 @@ const RegisterScreen = () => {
                 }}
                 value={form.TELP_NO}
                 errorMessage={''}
+                keyboardType='numeric'
               />
             </View>
           </View>

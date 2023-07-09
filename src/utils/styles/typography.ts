@@ -4,7 +4,7 @@ import theme from 'utils/theme';
 import {colors} from './colors';
 
 export const textBase: TextStyle = {
-  // fontFamily: theme.Text.style.fontFamily,
+  fontFamily: theme.Text.style.fontFamily,
   color: colors.primary,
 };
 

@@ -1747,6 +1747,16 @@ __metadata:
   languageName: node
   linkType: hard
 
+"@react-native-community/toolbar-android@npm:^0.2.1":
+  version: 0.2.1
+  resolution: "@react-native-community/toolbar-android@npm:0.2.1"
+  peerDependencies:
+    react: "*"
+    react-native: "*"
+  checksum: 540c708ec83d86ebe3d2c86ecf8463c3394cfd70c6ef14e2a4f37cd1338dd6b24d50e67af2cb2a36178cc9acb30e2d47357941bab68595eda07f0ae2c45662df
+  languageName: node
+  linkType: hard
+
 "@react-native-picker/picker@npm:^2.4.9":
   version: 2.4.9
   resolution: "@react-native-picker/picker@npm:2.4.9"
@@ -2385,6 +2395,7 @@ __metadata:
     "@react-native-async-storage/async-storage": ^1.17.11
     "@react-native-clipboard/clipboard": ^1.11.1
     "@react-native-community/eslint-config": ^2.0.0
+    "@react-native-community/toolbar-android": ^0.2.1
     "@react-native-picker/picker": ^2.4.9
     "@react-navigation/bottom-tabs": ^6.5.3
     "@react-navigation/native": ^6.1.2
@@ -2416,12 +2427,17 @@ __metadata:
     react-native-gesture-handler: ^2.9.0
     react-native-get-location: ^3.0.1
     react-native-image-picker: ^5.0.1
+    react-native-just-timeline: ^0.0.2
+    react-native-linear-gradient: ^2.7.3
     react-native-modern-datepicker: ^1.0.0-beta.91
     react-native-otp-inputs: ^7.4.0
+    react-native-ratings: ^8.1.0
     react-native-reanimated: ^2.14.4
     react-native-reanimated-carousel: ^3.3.0
     react-native-safe-area-context: ^4.5.0
     react-native-screens: ^3.19.0
+    react-native-toast-message: ^2.1.6
+    react-native-webview: ^13.2.2
     react-test-renderer: 18.1.0
     typescript: ^4.8.3
     zustand: ^4.3.2
@@ -4147,17 +4163,17 @@ __metadata:
   languageName: node
   linkType: hard
 
+"escape-string-regexp@npm:2.0.0, escape-string-regexp@npm:^2.0.0":
+  version: 2.0.0
+  resolution: "escape-string-regexp@npm:2.0.0"
+  checksum: 9f8a2d5743677c16e85c810e3024d54f0c8dea6424fad3c79ef6666e81dd0846f7437f5e729dfcdac8981bc9e5294c39b4580814d114076b8d36318f46ae4395
+  languageName: node
+  linkType: hard
+
 "escape-string-regexp@npm:^1.0.5":
   version: 1.0.5
   resolution: "escape-string-regexp@npm:1.0.5"
   checksum: 6092fda75c63b110c706b6a9bfde8a612ad595b628f0bd2147eea1d3406723020810e591effc7db1da91d80a71a737a313567c5abb3813e8d9c71f4aa595b410
-  languageName: node
-  linkType: hard
-
-"escape-string-regexp@npm:^2.0.0":
-  version: 2.0.0
-  resolution: "escape-string-regexp@npm:2.0.0"
-  checksum: 9f8a2d5743677c16e85c810e3024d54f0c8dea6424fad3c79ef6666e81dd0846f7437f5e729dfcdac8981bc9e5294c39b4580814d114076b8d36318f46ae4395
   languageName: node
   linkType: hard
 
@@ -5488,7 +5504,7 @@ __metadata:
   languageName: node
   linkType: hard
 
-"invariant@npm:^2.2.4":
+"invariant@npm:2.2.4, invariant@npm:^2.2.4":
   version: 2.2.4
   resolution: "invariant@npm:2.2.4"
   dependencies:
@@ -6854,6 +6870,13 @@ __metadata:
   version: 4.4.2
   resolution: "lodash.truncate@npm:4.4.2"
   checksum: b463d8a382cfb5f0e71c504dcb6f807a7bd379ff1ea216669aa42c52fc28c54e404bfbd96791aa09e6df0de2c1d7b8f1b7f4b1a61f324d38fe98bc535aeee4f5
+  languageName: node
+  linkType: hard
+
+"lodash@npm:4.17.15":
+  version: 4.17.15
+  resolution: "lodash@npm:4.17.15"
+  checksum: bb689bc88c0645b7002a045cdbe32292ae51d5d2a6f6a5272cb5a5ace9b06700bb3d30c6be6ecfae9a70f9c943f60e90765033fc7ff706cf9219374eeda314ad
   languageName: node
   linkType: hard
 
@@ -8563,6 +8586,29 @@ __metadata:
   languageName: node
   linkType: hard
 
+"react-native-just-timeline@npm:^0.0.2":
+  version: 0.0.2
+  resolution: "react-native-just-timeline@npm:0.0.2"
+  dependencies:
+    lodash: 4.17.15
+    react-native-vector-icons: ^6.3.0
+  peerDependencies:
+    react: ^16.6.3
+    react-native: ^0.58.4
+  checksum: f85688f18c29930a68a50bb2767e077dfe0030f30d0e0b0aad743b4746b082b5e661dcb0f24c416907abf4d1b33d35df054218c74635d5981a2cef39b3c9d263
+  languageName: node
+  linkType: hard
+
+"react-native-linear-gradient@npm:^2.7.3":
+  version: 2.7.3
+  resolution: "react-native-linear-gradient@npm:2.7.3"
+  peerDependencies:
+    react: "*"
+    react-native: "*"
+  checksum: 3b224e5f0a844e385f9010816e141d0903cd2a7e2c59fef9f67c7ef563ce6acb52b35f9ddaec3c6afb9560492d8513a15e4bf5e9dfc867fc3afb519ed9a9d693
+  languageName: node
+  linkType: hard
+
 "react-native-modern-datepicker@npm:^1.0.0-beta.91":
   version: 1.0.0-beta.91
   resolution: "react-native-modern-datepicker@npm:1.0.0-beta.91"
@@ -8583,6 +8629,18 @@ __metadata:
     react: "*"
     react-native: "*"
   checksum: 4c1398e4ee0969fd55edb58ff89f7fd23fe8b22aab6e0b96ed07e2a7744c9fa98f3e5f1ffdf019af2a2cbc5505eab1f15c13f020ce278400dc11cddbd6e9b7aa
+  languageName: node
+  linkType: hard
+
+"react-native-ratings@npm:^8.1.0":
+  version: 8.1.0
+  resolution: "react-native-ratings@npm:8.1.0"
+  dependencies:
+    lodash: ^4.17.15
+  peerDependencies:
+    react: "*"
+    react-native: "*"
+  checksum: 34aa4e7ff09e537d5c8fb5b5bc98470c0723d7c0fff8954e39de371cdfa5ae3aa4af636ea44d508751f5dcaca6f80ee363fffd9c34a1bd8d8f7a9d8a23d82d15
   languageName: node
   linkType: hard
 
@@ -8637,6 +8695,45 @@ __metadata:
     react: "*"
     react-native: "*"
   checksum: 3a0116bf0628a735bdb87d7e4648f4bbac278152599a2bdd973e4dec92f87cb2c805dd7adb844d01236c7c92bab017ea8de59bea44d9f58397fddb6f9f3077c5
+  languageName: node
+  linkType: hard
+
+"react-native-toast-message@npm:^2.1.6":
+  version: 2.1.6
+  resolution: "react-native-toast-message@npm:2.1.6"
+  peerDependencies:
+    react: "*"
+    react-native: "*"
+  checksum: 250ce35cf3df05562ac19a0f1dd9ca3b0f4731021cc1f95a6291fe320a1122f8fbc55e6e4185c9bc0303c43b0acf1435861a0a08e05dc69495b06db818f1daa1
+  languageName: node
+  linkType: hard
+
+"react-native-vector-icons@npm:^6.3.0":
+  version: 6.7.0
+  resolution: "react-native-vector-icons@npm:6.7.0"
+  dependencies:
+    lodash: ^4.17.15
+    prop-types: ^15.7.2
+    yargs: ^15.0.2
+  peerDependencies:
+    "@react-native-community/toolbar-android": ^0.1.0-rc.1
+  bin:
+    fa5-upgrade: bin/fa5-upgrade.sh
+    generate-icon: bin/generate-icon.js
+  checksum: 7dde88f441d3486efd473ac0ee5ce57a8ad70b2ebf8ff18adbc98cb941d5a2106747c6bb431d65ef4745c5f0e76c8e166ef3d07f42962c37d802c7be03afc340
+  languageName: node
+  linkType: hard
+
+"react-native-webview@npm:^13.2.2":
+  version: 13.2.2
+  resolution: "react-native-webview@npm:13.2.2"
+  dependencies:
+    escape-string-regexp: 2.0.0
+    invariant: 2.2.4
+  peerDependencies:
+    react: "*"
+    react-native: "*"
+  checksum: 3e47e9885cbd117de4d559e3361bd0e8d3e6c38a8761692a3cfbaaa878751b6e0e6037d0a91c0d932256f835a717b0d6011d6ed295d9d5237a5aa4115593163b
   languageName: node
   linkType: hard
 
@@ -10679,7 +10776,7 @@ __metadata:
   languageName: node
   linkType: hard
 
-"yargs@npm:^15.1.0, yargs@npm:^15.3.1, yargs@npm:^15.4.1":
+"yargs@npm:^15.0.2, yargs@npm:^15.1.0, yargs@npm:^15.3.1, yargs@npm:^15.4.1":
   version: 15.4.1
   resolution: "yargs@npm:15.4.1"
   dependencies:

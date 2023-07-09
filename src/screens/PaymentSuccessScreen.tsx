@@ -12,9 +12,9 @@ const PaymentSuccessScreen = () => {
     <View style={{flex: 1, alignItems: 'center', justifyContent: 'center'}}>
       <Text style={[h1, {}]}>Pembayaran Telah Berhasil di Proses</Text>
       <Text style={[h1, {fontSize: 20}]}>Terima Kasih</Text>
-      <Text style={[h1, {}]}>{currencyFormat(50000)}</Text>
+      {/* <Text style={[h1, {}]}>{currencyFormat(50000)}</Text>
       <Text style={[h1, {}]}>No. Pesanan Anda</Text>
-      <Text style={[h3, {}]}>3230230910239012</Text>
+      <Text style={[h3, {}]}>3230230910239012</Text> */}
 
       <View
         style={[

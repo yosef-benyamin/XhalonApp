@@ -8,7 +8,7 @@ import {
   View,
 } from 'react-native';
 import React, {useState} from 'react';
-import {ic_barber, ic_ellipse} from 'assets/icons';
+import {ic_barber, ic_ellipse, ic_xhalona} from 'assets/icons';
 import {WINDOW_HEIGHT, WINDOW_WIDTH} from 'utils/mixins';
 import {h1, h2, h3, h5} from 'utils/styles';
 import {theme} from 'utils';
@@ -49,7 +49,8 @@ const LoginScreen = () => {
     <View style={{flex: 1}}>
       <View>
         <Image source={ic_ellipse} style={styles.icEllipse} />
-        <Image source={ic_barber} style={styles.icBarber} />
+        <Image source={ic_xhalona} style={styles.icBarber} />
+        <Text style={[h1, styles.textXhalon]}>Xhalon</Text>
       </View>
 
       <ScrollView>
@@ -58,8 +59,6 @@ const LoginScreen = () => {
             marginTop: WINDOW_HEIGHT / 2.2,
             marginHorizontal: 16,
           }}>
-          <Text style={[h1, styles.textXhalon]}>Xhalon</Text>
-
           <Text style={[styles.title, h1]}>No. Handphone*</Text>
           <View
             style={[
@@ -118,7 +117,7 @@ const LoginScreen = () => {
             }}
           />
 
-          <TouchableOpacity onPress={()=> navigation.navigate('Register')}>
+          <TouchableOpacity onPress={() => navigation.navigate('Register')}>
             <Text
               style={[
                 h2,
@@ -150,15 +149,21 @@ const styles = StyleSheet.create({
   },
   icBarber: {
     position: 'absolute',
-    top: WINDOW_HEIGHT / 7,
+    top: 10,
     // left: 0,
     // right: 0,
     alignSelf: 'center',
-    height: WINDOW_HEIGHT / 4,
-    width: WINDOW_WIDTH / 1,
+    height: 192,
+    width: 192,
     resizeMode: 'contain',
   },
-  textXhalon: {alignSelf: 'center', fontSize: 40, color: theme.colors.grey1},
+  textXhalon: {
+    alignSelf: 'center',
+    fontSize: 40,
+    color: theme.colors.white,
+    position: 'absolute',
+    top: 200,
+  },
   title: {
     fontSize: FONT_SIZE_12,
     marginTop: 20,

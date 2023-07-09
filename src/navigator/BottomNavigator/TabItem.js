@@ -33,9 +33,9 @@ const TabItem = ({title, active, onPress, onLongPress}) => {
   const Icon = () => {
     if (title === 'Home') {
       return active ? (
-        <Image source={ic_home_active} style={styles.icon} />
+        <Image source={ic_home_active} style={styles.icon} resizeMode="contain" />
       ) : (
-        <Image source={ic_home_inactive} style={styles.icon} />
+        <Image source={ic_home_active} style={styles.icon} resizeMode="contain" />
       );
     }
     if (title === 'Produk') {
@@ -46,7 +46,7 @@ const TabItem = ({title, active, onPress, onLongPress}) => {
           resizeMode="contain"
         />
       ) : (
-        <Image source={ic_bag_inactive} style={styles.icon} />
+        <Image source={ic_bag_active} style={styles.icon} resizeMode="contain" />
       );
     }
     if (title === 'Official Salon') {
@@ -57,7 +57,7 @@ const TabItem = ({title, active, onPress, onLongPress}) => {
           resizeMode="contain"
         />
       ) : (
-        <Image source={ic_store_inactive} style={styles.icon} />
+        <Image source={ic_store_active} style={styles.icon} resizeMode="contain" />
       );
     }
     if (title === 'Favorite') {
@@ -68,7 +68,7 @@ const TabItem = ({title, active, onPress, onLongPress}) => {
           resizeMode="contain"
         />
       ) : (
-        <Image source={ic_favorite_inactive} style={styles.icon} />
+        <Image source={ic_favorite_active} style={styles.icon} resizeMode="contain" />
       );
     }
     if (title === 'Transaksi') {
@@ -79,7 +79,7 @@ const TabItem = ({title, active, onPress, onLongPress}) => {
           resizeMode="contain"
         />
       ) : (
-        <Image source={ic_bill_inactive} style={styles.icon} />
+        <Image source={ic_bill_active} style={styles.icon} resizeMode="contain" />
       );
     }
     return <Image source={ic_home_active} style={styles.icon} />;
@@ -103,17 +103,23 @@ export default TabItem;
 const styles = StyleSheet.create({
   container: {
     alignItems: 'center',
-    height: 35,
+    // height: 35,
+    padding: 3,
+    
+    margin: 5,
     flex: 1,
+    backgroundColor: '#fff',
+    borderRadius: 10,
+    elevation: 8,
   },
   text: active => ({
-    fontSize: 12,
-    color: active ? theme.colors.pink : theme.colors.low_pink,
-    fontWeight: '700',
+    fontSize: 10,
+    color: active ? theme.colors.pink : theme.colors.pink,
+    fontWeight: '600',
     marginTop: 4,
   }),
   icon: {
-    height: 25,
-    width: 25,
+    height: 20,
+    width: 20,
   },
 });

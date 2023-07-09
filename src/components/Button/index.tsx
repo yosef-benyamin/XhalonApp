@@ -55,7 +55,7 @@ const Button = ({
         lineColor && {borderColor: lineColor, borderWidth: 1}
       ]}>
       {!isLoading && (
-        <Text style={[h1, TextTheme(_theme), styleText]}>{title}</Text>
+        <Text style={[h1, TextTheme(_theme), styleText, {fontSize: 14}]}>{title}</Text>
       )}
       {isLoading && (
         <ActivityIndicator size={'small'} color={theme.colors.white} />

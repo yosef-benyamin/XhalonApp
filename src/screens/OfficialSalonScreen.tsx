@@ -9,7 +9,7 @@ import {
   TouchableOpacity,
   View,
 } from 'react-native';
-import React, {useCallback, useEffect} from 'react';
+import React, {useCallback, useEffect, useState} from 'react';
 import {iconCustomSize, iconSize, rowCenter, WINDOW_WIDTH} from 'utils/mixins';
 import {
   ic_cart,
@@ -35,40 +35,46 @@ import Button from 'components/Button';
 import {useProductStore} from 'store/actions/ProductStore';
 import {IStore} from 'types/products.types';
 import HeaderCarousel from './HeaderCarousel';
+import SalonCard from 'components/SalonCard';
+import {calculateDistance, getLocation} from 'utils/getDistance';
 
 const HomeScreen = () => {
   const navigation = useNavigation();
-
+  const [dist, setDist] = useState(0);
+  const [loc, setLoc] = useState<{longitude: number; latitude: number}>({
+    latitude: 0,
+    longitude: 0,
+  });
   const ProductStore = useProductStore(state => state);
 
   // console.log('ProductStore = ', ProductStore);
 
   useEffect(() => {
     ProductStore.getStore();
+
+    func();
   }, [navigation]);
+
+  const func = async () => {
+    let a: any = await getLocation();
+    console.log('aaa =', a);
+    setLoc(a);
+  };
+
+  const _getDistance = (item: IStore) => {
+    const lat1 = parseInt(item?.MAP_LOCATION?.split(',')?.[0]); // Latitude titik awal
+    const lon1 = parseInt(item?.MAP_LOCATION?.split(',')?.[1]); // Longitude titik awal
+    const lat2 = loc?.latitude; // Ganti dengan nilai yang sesuai
+    const lon2 = loc.longitude; // Ganti dengan nilai yang sesuai
+
+    const distance = calculateDistance(lat1, lon1, lat2, lon2);
+    return distance.toFixed();
+  };
 
   const renderItem: ListRenderItem<any> = useCallback(
     ({item}: {item: IStore}) => (
-      <View style={[rowCenter, {justifyContent: 'center', padding: 10}]}>
-        <Image
-          source={img_barber}
-          style={{width: 150, height: 160, borderRadius: 10, marginRight: 10}}
-          resizeMode={'cover'}
-        />
-
-        <View style={styles.descWrapper}>
-          <Text>{item?.COMPANY_NAME}</Text>
-          <Text>{item?.OPERATIONAL_DAY}</Text>
-          <Text>{item?.OPERATIONAL_HOUR}</Text>
-
-          <Image
-            source={ic_stars}
-            style={{width: 50, height: 25}}
-            resizeMode={'contain'}
-          />
-
-          <Button _theme="pink" title="Kunjungi" onPress={() => {navigation.navigate('SalonDetail', {dataStore: item})}} />
-        </View>
+      <View style={{flex: 1 / 2, marginHorizontal: 3}}>
+        <SalonCard item={item} distance={_getDistance(item)} />
       </View>
     ),
     [],
@@ -81,20 +87,24 @@ const HomeScreen = () => {
         backgroundColor: '#ffffff',
       }}>
       <ScrollView nestedScrollEnabled>
-      <HeaderCarousel/>
+        <HeaderCarousel />
 
         <Text style={[h1, {fontSize: 20, margin: 16}]}>Daftar Salon</Text>
 
         <FlatList
-          data={[...ProductStore?.store || []]}
+          data={[...(ProductStore?.store || [])]}
           // data={[]}
           renderItem={renderItem}
+          // horizontal
+          numColumns={2}
           keyExtractor={(_item, index) => `${index}`}
-          style={{
-            // backgroundColor: theme.colors.cloud,
-            // width: '100%',
-            // alignSelf: 'center',
-          }}
+          contentContainerStyle={
+            {
+              // backgroundColor: theme.colors.cloud,
+              // width: '100%',
+              // alignItems: 'center',
+            }
+          }
           ListFooterComponent={() => <View style={{marginBottom: 170}} />}
           ListEmptyComponent={() => (
             <View
@@ -153,15 +163,5 @@ const styles = StyleSheet.create({
     borderBottomColor: theme.colors.pink,
     borderBottomWidth: 1,
     marginRight: 20,
-  },
-  descWrapper: {
-    // margin: 16,
-    elevation: 5,
-    backgroundColor: '#fff',
-    alignItems: 'center',
-    borderRadius: 10,
-    paddingHorizontal: 30,
-    paddingVertical: 10,
-    height: 150,
   },
 });
