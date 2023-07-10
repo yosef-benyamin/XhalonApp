@@ -18,7 +18,7 @@ const theme = {
     blue: '#0085FF',
     red: '#EA2626',
     pink: '#C0226D',
-    low_pink: '#f8a0a9',
+    low_pink: '#C0226D59',
     windowBg: '#FFFFFF',
     navBar: {
       titleColor: '#212121',

@@ -73,7 +73,7 @@ const HomeScreen = () => {
 
   const renderItem: ListRenderItem<any> = useCallback(
     ({item}: {item: IStore}) => (
-      <View style={{flex: 1 / 2, marginHorizontal: 3}}>
+      <View style={{marginHorizontal: 3}}>
         <SalonCard item={item} distance={_getDistance(item)} />
       </View>
     ),
@@ -96,13 +96,13 @@ const HomeScreen = () => {
           // data={[]}
           renderItem={renderItem}
           // horizontal
-          numColumns={2}
+          // numColumns={1}
           keyExtractor={(_item, index) => `${index}`}
           contentContainerStyle={
             {
               // backgroundColor: theme.colors.cloud,
               // width: '100%',
-              // alignItems: 'center',
+              alignItems: 'center',
             }
           }
           ListFooterComponent={() => <View style={{marginBottom: 170}} />}

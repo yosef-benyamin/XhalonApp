@@ -46,7 +46,6 @@ import {Picker} from '@react-native-picker/picker';
 import appBar from 'components/AppBar/AppBar';
 import {img_barber} from 'assets/images';
 
-
 const OtpVerificationScreen = () => {
   const navigation = useNavigation();
   const [modalVisible, setModalVisible] = useState(false);
@@ -64,19 +63,32 @@ const OtpVerificationScreen = () => {
       appBar({
         leading: (
           <TouchableOpacity
-            style={[rowCenter]}
+            style={[
+              rowCenter,
+              {
+                justifyContent: 'space-between',
+                backgroundColor: theme.colors.pink,
+                padding: 16,
+                width: WINDOW_WIDTH,
+                paddingVertical: 30,
+                borderBottomEndRadius: 50,
+                borderBottomLeftRadius: 50,
+              },
+            ]}
             onPress={() => navigation.goBack()}>
             <Image
               source={ic_arrow_left_black}
               style={{
-                height: 20,
-                width: 20,
-                marginLeft: 16,
+                height: 25,
+                width: 25,
+                // marginLeft: 16,
+                tintColor:'#fff'
               }}
             />
-            <Text style={[h1, {color: '#000', marginLeft: 10, fontSize: 14}]}>
+            <Text style={[h1, {color: '#fff', marginLeft: 10, fontSize: 17}]}>
               Booking Pesanan
             </Text>
+            <View style={{width: 40}} />
           </TouchableOpacity>
         ),
       }),
@@ -149,13 +161,13 @@ const OtpVerificationScreen = () => {
 
         <ReactNativeModernDatepicker
           options={{
-            backgroundColor: theme.colors.white,
-            textSecondaryColor: theme.colors.pink,
-            textDefaultColor: theme.colors.pink,
-            selectedTextColor: theme.colors.white,
-            textHeaderColor: theme.colors.pink,
+            backgroundColor: theme.colors.pink,
+            textSecondaryColor: theme.colors.white,
+            textDefaultColor: theme.colors.white,
+            selectedTextColor: theme.colors.pink,
+            textHeaderColor: theme.colors.white,
             borderColor: theme.colors.grey6,
-            mainColor: theme.colors.low_pink,
+            mainColor: theme.colors.white,
           }}
           locale="ID"
           mode="calendar"
@@ -165,6 +177,7 @@ const OtpVerificationScreen = () => {
             width: WINDOW_WIDTH - 50,
             alignSelf: 'center',
             borderRadius: 10,
+            marginTop: 30
           }}
           onDateChange={x => {
             console.log('selected date = ', x);
@@ -172,12 +185,12 @@ const OtpVerificationScreen = () => {
           }}
         />
 
-        <Text style={[h1, {marginVertical: 10, fontSize: 13}]}>
+        <Text style={[h1, {marginVertical: 10, fontSize: 15}]}>
           Jam Tersedia
         </Text>
 
         <View style={[rowCenter, {justifyContent: 'space-between'}]}>
-          {/* <Text style={[h3, {width: '10%', fontSize: 15}]}>Pagi</Text> */}
+          <Text style={[h3, {width: '15%', fontSize: 15}]}>Pagi</Text>
 
           {['10:00', '11:00', '11:30'].map((x, i) => (
             <TouchableOpacity
@@ -185,7 +198,7 @@ const OtpVerificationScreen = () => {
               style={[
                 styles.boxText,
                 {
-                  backgroundColor: jam === x ? theme.colors.low_pink : '#fff',
+                  backgroundColor: jam === x ? theme.colors.pink : '#fff',
                   borderWidth: 1,
                   borderColor:
                     jam === x ? theme.colors.low_pink : theme.colors.grey6,
@@ -196,8 +209,7 @@ const OtpVerificationScreen = () => {
                 style={[
                   h1,
                   {
-                    color:
-                      jam === x ? theme.colors.white : theme.colors.low_pink,
+                    color: jam === x ? theme.colors.white : theme.colors.grey0,
                   },
                 ]}>
                 {x}
@@ -210,7 +222,7 @@ const OtpVerificationScreen = () => {
             rowCenter,
             {justifyContent: 'space-between', marginVertical: 10},
           ]}>
-          {/* <Text style={[h3, {width: '10%', fontSize: 15}]}>Siang</Text> */}
+          <Text style={[h3, {width: '15%', fontSize: 15}]}>Siang</Text>
 
           {['12:00', '13:00', '14:00'].map((x, i) => (
             <TouchableOpacity
@@ -218,7 +230,7 @@ const OtpVerificationScreen = () => {
               style={[
                 styles.boxText,
                 {
-                  backgroundColor: jam === x ? theme.colors.low_pink : '#fff',
+                  backgroundColor: jam === x ? theme.colors.pink : '#fff',
                   borderWidth: 1,
                   borderColor:
                     jam === x ? theme.colors.low_pink : theme.colors.grey6,
@@ -229,8 +241,7 @@ const OtpVerificationScreen = () => {
                 style={[
                   h1,
                   {
-                    color:
-                      jam === x ? theme.colors.white : theme.colors.low_pink,
+                    color: jam === x ? theme.colors.white : theme.colors.grey0,
                   },
                 ]}>
                 {x}
@@ -239,7 +250,7 @@ const OtpVerificationScreen = () => {
           ))}
         </View>
         <View style={[rowCenter, {justifyContent: 'space-between'}]}>
-          {/* <Text style={[h3, {width: '12%', fontSize: 15}]}>Sore</Text> */}
+          <Text style={[h3, {width: '15%', fontSize: 15}]}>Sore</Text>
 
           {['17:00', '17:30', '18:00'].map((x, i) => (
             <TouchableOpacity
@@ -247,7 +258,7 @@ const OtpVerificationScreen = () => {
               style={[
                 styles.boxText,
                 {
-                  backgroundColor: jam === x ? theme.colors.low_pink : '#fff',
+                  backgroundColor: jam === x ? theme.colors.pink : '#fff',
                   borderWidth: 1,
                   borderColor:
                     jam === x ? theme.colors.low_pink : theme.colors.grey6,
@@ -258,8 +269,7 @@ const OtpVerificationScreen = () => {
                 style={[
                   h1,
                   {
-                    color:
-                      jam === x ? theme.colors.white : theme.colors.low_pink,
+                    color: jam === x ? theme.colors.white : theme.colors.grey0,
                   },
                 ]}>
                 {x}
@@ -294,7 +304,7 @@ const OtpVerificationScreen = () => {
               style={[
                 h1,
                 bookingType !== 'TO SALON'
-                  ? {color: theme.colors.low_pink}
+                  ? {color: theme.colors.grey0}
                   : {color: '#fff'},
               ]}>
               Datang Ke Salon
@@ -312,7 +322,7 @@ const OtpVerificationScreen = () => {
               style={[
                 h1,
                 bookingType !== 'TO HOME'
-                  ? {color: theme.colors.low_pink}
+                  ? {color: theme.colors.grey0}
                   : {color: '#fff'},
               ]}>
               Booking Ke Rumah
@@ -347,7 +357,7 @@ export default OtpVerificationScreen;
 
 const styles = StyleSheet.create({
   boxText: {
-    paddingHorizontal: WINDOW_WIDTH / 10,
+    paddingHorizontal: WINDOW_WIDTH / 15,
     paddingVertical: 8,
     backgroundColor: '#fff',
     borderRadius: 5,
@@ -364,7 +374,7 @@ const styles = StyleSheet.create({
   },
   inactiveButton: {
     // elevation: 4,
-    backgroundColor: theme.colors.low_pink,
+    backgroundColor: theme.colors.pink,
     padding: 10,
     borderRadius: 8,
     width: '45%',

@@ -77,7 +77,7 @@ const CustomTextInput = ({
       <View
         style={[
           styles.inputWrapper,
-          {borderColor: errorMessage ? theme.colors.red : theme.colors.low_pink},
+          {borderColor: errorMessage ? theme.colors.red : theme.colors.grey5},
         ]}>
         {leftIcon && (
           <Image source={leftIcon} style={[iconSize, {marginRight: 10}]} />
@@ -112,7 +112,7 @@ export default CustomTextInput;
 const styles = StyleSheet.create({
   inputWrapper: {
     borderWidth: 1,
-    borderColor: theme.colors.low_pink,
+    borderColor: theme.colors.grey5,
     padding: 10,
     flexDirection: 'row',
     alignItems: 'center',

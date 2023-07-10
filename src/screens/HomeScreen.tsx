@@ -1,6 +1,7 @@
 import {
   FlatList,
   Image,
+  ListRenderItem,
   ScrollView,
   StyleSheet,
   Text,
@@ -8,9 +9,18 @@ import {
   TouchableOpacity,
   View,
 } from 'react-native';
-import React, {useEffect, useState} from 'react';
+import React, {useCallback, useEffect, useState} from 'react';
 import {iconCustomSize, iconSize, rowCenter, WINDOW_WIDTH} from 'utils/mixins';
-import {ic_arrow_left, ic_arrow_right, ic_broken_image, ic_cart, ic_chat, ic_haircut, ic_menu, ic_search} from 'assets/icons';
+import {
+  ic_arrow_left,
+  ic_arrow_right,
+  ic_broken_image,
+  ic_cart,
+  ic_chat,
+  ic_haircut,
+  ic_menu,
+  ic_search,
+} from 'assets/icons';
 import {h1, h2, h3, h4, h5} from 'utils/styles';
 import {theme} from 'utils';
 import {ic_beard, img_barber, img_boy, img_dash} from 'assets/images';
@@ -79,6 +89,17 @@ const HomeScreen = () => {
     return distance.toFixed();
   };
 
+
+  const renderItem: ListRenderItem<any> = useCallback(
+    ({item}: {item: IStore}) => (
+      // <View style={{}}>
+        <SalonCard item={item} horizontal={true} />
+      // </View>
+    ),
+    [],
+  );
+
+
   return (
     <View
       style={{
@@ -92,7 +113,12 @@ const HomeScreen = () => {
           {ProductStore?.groupCategory?.length > 0 &&
             [...ProductStore?.groupCategory].map((x, i) => (
               <TouchableOpacity key={i} style={styles.typeWrapper}>
-                <Image source={x?.THUMB_IMAGE ? {uri: x?.THUMB_IMAGE}: ic_broken_image} style={iconSize} />
+                <Image
+                  source={
+                    x?.THUMB_IMAGE ? {uri: x?.THUMB_IMAGE} : ic_broken_image
+                  }
+                  style={iconSize}
+                />
                 <Text
                   style={[
                     h2,
@@ -107,8 +133,14 @@ const HomeScreen = () => {
                 </Text>
               </TouchableOpacity>
             ))}
-            <Image source={ic_arrow_left} style={[iconCustomSize(25), {position: 'absolute', left: 0, }]} />
-            <Image source={ic_arrow_right} style={[iconCustomSize(25), {position: 'absolute', right: 0, }]} />
+          <Image
+            source={ic_arrow_left}
+            style={[iconCustomSize(25), {position: 'absolute', left: 0}]}
+          />
+          <Image
+            source={ic_arrow_right}
+            style={[iconCustomSize(25), {position: 'absolute', right: 0}]}
+          />
         </View>
 
         <View style={{margin: 16}}>
@@ -138,15 +170,23 @@ const HomeScreen = () => {
                     }}>
                     <Image
                       // source={ic_beard}
-                      source={x?.THUMB_IMAGE ? {uri: x?.THUMB_IMAGE!}: ic_broken_image}
+                      source={
+                        x?.THUMB_IMAGE
+                          ? {uri: x?.THUMB_IMAGE!}
+                          : ic_broken_image
+                      }
                       style={{
                         width: 70,
                         height: 53,
-                        resizeMode: 'stretch'
+                        resizeMode: 'stretch',
                         // marginRight: 10,
                       }}
                     />
-                    <Text style={[h5, {textAlign: 'center', width: '70%', fontSize: 14}]}>
+                    <Text
+                      style={[
+                        h5,
+                        {textAlign: 'center', width: '70%', fontSize: 14},
+                      ]}>
                       {x?.KET_ANALISA_GLOBAL}
                     </Text>
                   </TouchableOpacity>
@@ -162,28 +202,40 @@ const HomeScreen = () => {
               {justifyContent: 'space-between', marginBottom: 10},
             ]}>
             <Text style={[h5, {fontSize: 18}]}>Salon Populer Terdekat</Text>
-            <Text style={[h4, {color: theme.colors.pink, fontSize: 10}]} onPress={()=> navigation.navigate('Search')}>
+            <Text
+              style={[h4, {color: theme.colors.pink, fontSize: 10}]}
+              onPress={() => navigation.navigate('Search')}>
               Lihat Semua
             </Text>
           </View>
-
-          <View style={rowCenter}>
-            <ScrollView horizontal>
-              {storeP?.length > 0 &&
-                [...storeP].map((x: any, i) => (
-                  <SalonCard
-                    item={ProductStore.store.find(
-                      y => y.COMPANY_ID === x?.COMPANY_ID,
-                    )}
-                    distance={_getDistance(
-                      ProductStore.store.find(
-                        y => y.COMPANY_ID === x?.COMPANY_ID,
-                      ),
-                    )}
-                  />
-                ))}
-            </ScrollView>
-          </View>
+            <FlatList
+              data={[...(storeP || [])]}
+              // data={[]}
+              renderItem={renderItem}
+              horizontal
+              // numColumns={1}
+              keyExtractor={(_item, index) => `${index}`}
+              contentContainerStyle={{
+                // backgroundColor: theme.colors.red,
+                // width: '100%',
+                alignItems: 'center',
+                // marginLeft: 50
+              }}
+              ListFooterComponent={() => <View style={{marginBottom: 170}} />}
+              ListEmptyComponent={() => (
+                <View
+                  style={{
+                    flex: 1,
+                    justifyContent: 'center',
+                    alignItems: 'center',
+                    width: '100%',
+                    height: '100%',
+                  }}>
+                  <Text>Produk Kosong</Text>
+                </View>
+              )}
+            />
+          {/* </View> */}
         </View>
 
         <View style={{margin: 16}}>
@@ -193,28 +245,40 @@ const HomeScreen = () => {
               {justifyContent: 'space-between', marginBottom: 10},
             ]}>
             <Text style={[h5, {fontSize: 18}]}>Salon Promo</Text>
-            <Text style={[h4, {color: theme.colors.pink, fontSize: 10}]} onPress={()=> navigation.navigate('Search')}>
+            <Text
+              style={[h4, {color: theme.colors.pink, fontSize: 10}]}
+              onPress={() => navigation.navigate('Search')}>
               Lihat Semua
             </Text>
           </View>
 
-          <View style={rowCenter}>
-            <ScrollView horizontal>
-              {storeP?.length > 0 &&
-                [...storeP].map((x: any, i) => (
-                  <SalonCard
-                    item={ProductStore.store.find(
-                      y => y.COMPANY_ID === x?.COMPANY_ID,
-                    )}
-                    distance={_getDistance(
-                      ProductStore.store.find(
-                        y => y.COMPANY_ID === x?.COMPANY_ID,
-                      ),
-                    )}
-                  />
-                ))}
-            </ScrollView>
-          </View>
+          <FlatList
+              data={[...(storeP || [])]}
+              // data={[]}
+              renderItem={renderItem}
+              horizontal
+              // numColumns={1}
+              keyExtractor={(_item, index) => `${index}`}
+              contentContainerStyle={{
+                // backgroundColor: theme.colors.red,
+                // width: '100%',
+                alignItems: 'center',
+                // marginLeft: 50
+              }}
+              ListFooterComponent={() => <View style={{marginBottom: 170}} />}
+              ListEmptyComponent={() => (
+                <View
+                  style={{
+                    flex: 1,
+                    justifyContent: 'center',
+                    alignItems: 'center',
+                    width: '100%',
+                    height: '100%',
+                  }}>
+                  <Text>Produk Kosong</Text>
+                </View>
+              )}
+            />
         </View>
 
         <View style={{margin: 16}}>
@@ -224,30 +288,50 @@ const HomeScreen = () => {
               {justifyContent: 'space-between', marginBottom: 10},
             ]}>
             <Text style={[h5, {fontSize: 18}]}>salon Terakhir di kunjungi</Text>
-            <Text style={[h4, {color: theme.colors.pink, fontSize: 12}]} onPress={()=> navigation.navigate('Search')}>
+            <Text
+              style={[h4, {color: theme.colors.pink, fontSize: 12}]}
+              onPress={() => navigation.navigate('Search')}>
               Lihat Semua
             </Text>
           </View>
 
-          <View style={rowCenter}>
-            <ScrollView horizontal>
-              {storeP?.length > 0 &&
-                [...storeP].map((x: any, i) => (
-                  <SalonCard
-                    item={ProductStore.store.find(
-                      y => y.COMPANY_ID === x?.COMPANY_ID,
-                    )}
-                    distance={_getDistance(
-                      ProductStore.store.find(
-                        y => y.COMPANY_ID === x?.COMPANY_ID,
-                      ),
-                    )}
-                  />
-                ))}
-            </ScrollView>
-          </View>
+          <FlatList
+              data={[...(storeP || [])]}
+              // data={[]}
+              renderItem={renderItem}
+              horizontal
+              // numColumns={1}
+              keyExtractor={(_item, index) => `${index}`}
+              contentContainerStyle={{
+                // backgroundColor: theme.colors.red,
+                // width: '100%',
+                alignItems: 'center',
+                // marginLeft: 50
+              }}
+              ListFooterComponent={() => <View style={{marginBottom: 170}} />}
+              ListEmptyComponent={() => (
+                <View
+                  style={{
+                    flex: 1,
+                    justifyContent: 'center',
+                    alignItems: 'center',
+                    width: '100%',
+                    height: '100%',
+                  }}>
+                  <Text>Produk Kosong</Text>
+                </View>
+              )}
+            />
         </View>
-        <Text style={{fontSize: 20, fontWeight: '600', color: theme.colors.pink, alignSelf: 'center'}}>© 2023  Xhalon | All Rights Reserved</Text>
+        <Text
+          style={{
+            fontSize: 20,
+            fontWeight: '600',
+            color: theme.colors.pink,
+            alignSelf: 'center',
+          }}>
+          © 2023 Xhalon | All Rights Reserved
+        </Text>
       </ScrollView>
     </View>
   );

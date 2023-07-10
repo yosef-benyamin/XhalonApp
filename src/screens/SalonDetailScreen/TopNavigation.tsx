@@ -19,8 +19,8 @@ import InventoryTab from './InventoryTab';
 
 type ITab = 'home' | 'inventory' | 'kategory' | 'feed' | 'review';
 
-const TopNavigation = ({COMPANY_ID}: {COMPANY_ID: string}) => {
-  const MENUS = ['home', 'inventory', 'kategory', 'feed', 'review'];
+const TopNavigation = ({COMPANY_ID, open, setOpen}: {COMPANY_ID: string; open: boolean; setOpen:any}) => {
+  const MENUS = ['home', 'inventory', 'review'];
   const [activeTab, setActiveTab] = useState<ITab>('home');
 
   const ImgGen = (t: ITab, isActive: boolean) => {
@@ -83,7 +83,7 @@ const TopNavigation = ({COMPANY_ID}: {COMPANY_ID: string}) => {
       </View>
       <View style={{margin: 16}}>
         {activeTab === 'home' && <HomeTab COMPANY_ID = {COMPANY_ID} />}
-        {activeTab === 'inventory' && <InventoryTab />}
+        {activeTab === 'inventory' && <InventoryTab COMPANY_ID = {COMPANY_ID} open={open} setOpen={setOpen} />}
       </View>
       
     </View>

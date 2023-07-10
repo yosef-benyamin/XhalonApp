@@ -38,6 +38,7 @@ import {useCartStore} from 'store/actions/cartStore';
 import {RootStackParamList} from 'types/navigator';
 import GetLocation from 'react-native-get-location';
 import Loading from 'components/Loading';
+import { theme } from 'utils';
 
 type FormBookingOrderRouteProp = RouteProp<
   RootStackParamList,
@@ -107,19 +108,32 @@ const FormBookingOrderScreen = () => {
       appBar({
         leading: (
           <TouchableOpacity
-            style={rowCenter}
+            style={[
+              rowCenter,
+              {
+                justifyContent: 'space-between',
+                backgroundColor: theme.colors.pink,
+                padding: 16,
+                width: WINDOW_WIDTH,
+                paddingVertical: 30,
+                borderBottomEndRadius: 50,
+                borderBottomLeftRadius: 50,
+              },
+            ]}
             onPress={() => navigation.goBack()}>
             <Image
               source={ic_arrow_left_black}
               style={{
-                height: 20,
-                width: 20,
-                marginLeft: 16,
+                height: 25,
+                width: 25,
+                // marginLeft: 16,
+                tintColor:'#fff'
               }}
             />
-            <Text style={[h1, {color: '#000', marginLeft: 10}]}>
+            <Text style={[h1, {color: '#fff', marginLeft: 10, fontSize: 17}]}>
               Booking Pesanan
             </Text>
+            <View style={{width: 40}} />
           </TouchableOpacity>
         ),
       }),
@@ -167,8 +181,8 @@ const FormBookingOrderScreen = () => {
     <View style={{flex: 1, padding: 10, backgroundColor: '#fff'}}>
       <ScrollView>
         <Text
-          style={[h1, {textAlign: 'center', fontSize: 14, marginVertical: 5}]}>
-          Form Alamat Pesanan
+          style={[h1, {textAlign: 'center', fontSize: 24, marginVertical: 20}]}>
+          Pilih Alamat Pemesanan
         </Text>
 
         <CustomTextInput

@@ -28,7 +28,7 @@ import {
 } from 'assets/icons';
 import {WINDOW_WIDTH, iconCustomSize, iconSize, rowCenter} from 'utils/mixins';
 import {theme} from 'utils';
-import {img_barber, img_hair} from 'assets/images';
+import {ic_beard, img_barber, img_boy, img_hair} from 'assets/images';
 import {h1, h2, h3, h4, h5} from 'utils/styles';
 import TopNavigation from './TopNavigation';
 import {
@@ -47,6 +47,7 @@ import {addFavorit, deleteFavorit} from 'store/effects/favoritStore';
 import Button from 'components/Button';
 import {checkCart} from 'utils/addToCart';
 import {BASE_URL} from '@env';
+import { AirbnbRating } from 'react-native-ratings';
 
 type ProductDetailScreenRouteProp = RouteProp<
   RootStackParamList,
@@ -133,17 +134,11 @@ const ProductDetailScreen = () => {
         <TouchableOpacity
           style={styles.whiteBox}
           onPress={() => navigation.navigate('CartList')}>
-          <Image
-            source={ic_cart}
-            style={[iconSize, {}]}
-          />
+          <Image source={ic_cart} style={[iconSize, {}]} />
         </TouchableOpacity>
 
         <TouchableOpacity style={styles.whiteBox}>
-          <Image
-            source={ic_chat}
-            style={[iconSize, {}]}
-          />
+          <Image source={ic_chat} style={[iconSize, {}]} />
         </TouchableOpacity>
       </View>
 
@@ -170,12 +165,15 @@ const ProductDetailScreen = () => {
               {justifyContent: 'space-between', marginTop: 10},
             ]}>
             <View>
-
-            {dataStore?.DISCOUNT_VAL !== 0 ? (
+              {dataStore?.DISCOUNT_VAL !== 0 ? (
                 <View style={[rowCenter]}>
                   <Text style={[h4, {}]}>
                     {dataStore?.DISCOUNT_VAL}%{' '}
-                    <Text style={{textDecorationLine: 'line-through', fontWeight: '300'}}>
+                    <Text
+                      style={{
+                        textDecorationLine: 'line-through',
+                        fontWeight: '300',
+                      }}>
                       {currencyFormat(dataStore?.UNIT_PRICE)}
                     </Text>
                   </Text>
@@ -193,7 +191,6 @@ const ProductDetailScreen = () => {
                 ]}>
                 {dataStore?.PART_NAME}
               </Text>
-              
             </View>
             <TouchableOpacity
               style={{
@@ -226,7 +223,9 @@ const ProductDetailScreen = () => {
 
           <ScrollView horizontal>
             <View style={[rowCenter, {justifyContent: 'space-between'}]}>
-              <Text style={[h3, {fontSize: 16, fontWeight: '300'}]}>Terjual 1000</Text>
+              <Text style={[h3, {fontSize: 16, fontWeight: '300'}]}>
+                Terjual 1000
+              </Text>
 
               <TouchableOpacity
                 style={[
@@ -293,15 +292,24 @@ const ProductDetailScreen = () => {
           <View style={styles.lineHorizontal} />
 
           <View style={[rowCenter, {margin: 16}]}>
-          <Image
-                  source={ProductStore?.store?.find(
-                    x => x.COMPANY_ID === dataStore?.COMPANY_ID,
-                  )?.THUMB_IMAGE ? {uri: BASE_URL+'/'+ProductStore?.store?.find(
-                    x => x.COMPANY_ID === dataStore?.COMPANY_ID,
-                  )?.THUMB_IMAGE}: ic_broken_image }
-                  style={{height: 68, width: 113, borderRadius: 10}}
-                  resizeMode={'contain'}
-                />
+            <Image
+              source={
+                ProductStore?.store?.find(
+                  x => x.COMPANY_ID === dataStore?.COMPANY_ID,
+                )?.THUMB_IMAGE
+                  ? {
+                      uri:
+                        BASE_URL +
+                        '/' +
+                        ProductStore?.store?.find(
+                          x => x.COMPANY_ID === dataStore?.COMPANY_ID,
+                        )?.THUMB_IMAGE,
+                    }
+                  : ic_broken_image
+              }
+              style={{height: 68, width: 113, borderRadius: 10}}
+              resizeMode={'contain'}
+            />
 
             <View style={[{marginLeft: 10}]}>
               <View style={rowCenter}>
@@ -393,36 +401,103 @@ const ProductDetailScreen = () => {
               ))}
           </ScrollView>
         </View>
-        <View style={{marginBottom: 20}} />
+        <View style={[styles.lineHorizontal]} />
+
+        <View style={[{padding: 16}]}>
+          <View style={[rowCenter, {justifyContent: 'space-between'}]}>
+            <Text style={[h1, {fontSize: 16}]}>Ulasan Pembeli</Text>
+            <Text style={[h5, {color: theme.colors.pink}]}>Lihat Semua</Text>
+          </View>
+
+          <View style={[rowCenter]}>
+            <Image
+              source={ic_star}
+              style={[iconSize, {tintColor: '#c8ad42'}]}
+            />
+            <Text style={[h1]}>4.7</Text>
+            <Text style={[h1, {marginLeft: 5, color: theme.colors.grey4}]}>
+              dari 67234 Rating . 198 Ulasan
+            </Text>
+          </View>
+
+          <View style={[rowCenter]}>
+            {[...Array(5)]?.map((x, i) => (
+              <Image source={ic_beard} style={[iconCustomSize(50), {marginRight : 10}]} />
+            ))}
+          </View>
+
+          <View style={[rowCenter, {marginTop: 20}]}>
+            <Image source={img_boy} style={[iconCustomSize(30), {borderRadius: WINDOW_WIDTH/2}]} />
+            <Text style={[h1]}> Putri</Text>
+          </View>
+
+          <View style={[rowCenter, {marginTop: 20}]}>
+            <AirbnbRating
+              defaultRating={5}
+              isDisabled
+              showRating={false}
+              size={10}
+            />
+            <Text style={[h1, {color: theme.colors.grey3}]}> 3 minggu lalu</Text>
+          </View>
+          
+          <View style={styles.commentCard}>
+            <Text>hasilnya bagus banget loh</Text>
+          </View>
+
+          <View style={styles.lineHorizontal} />
+          
+          <Text style={[h1, {fontSize: 18}]}>Penilaian Produk</Text>
+
+          <View style={[rowCenter, {marginTop :20}]}>
+            <View style={[rowCenter]}>
+              <Text style={[h1, {fontSize: 21}]}>4.9</Text>
+              <Image source={ic_star} style={[iconCustomSize(30), {tintColor: '#c8ad42'}]} />
+            </View>
+
+            <View style={{marginLeft: 10}}>
+              <View style={{height: 0.5, width: WINDOW_WIDTH-120, backgroundColor: 'blue', marginBottom: 5}} />
+              <View style={{height: 0.5, width: WINDOW_WIDTH-130, backgroundColor: 'blue', marginBottom: 5}} />
+              <View style={{height: 0.5, width: WINDOW_WIDTH-140, backgroundColor: 'blue', marginBottom: 5}} />
+              <View style={{height: 0.5, width: WINDOW_WIDTH-150, backgroundColor: 'blue', marginBottom: 5}} />
+              <View style={{height: 0.5, width: WINDOW_WIDTH-160, backgroundColor: 'blue', marginBottom: 5}} />
+              <View style={{height: 0.5, width: WINDOW_WIDTH-170, backgroundColor: 'blue', marginBottom: 5}} />
+            </View>
+          </View>
+
+          <View style={styles.lineHorizontal} />
+          
+          <Text style={[{fontSize: 12, color: 'blue', alignSelf: 'flex-end'}]}>+ add review</Text>
+        </View>
       </ScrollView>
-      
+
       <View style={[rowCenter]}>
-      <Button
-        _theme="pink"
-        onPress={() => checkCart(dataStore)}
-        title="Chat"
-        styleWrapper={{
-          width: '20%',
-          alignSelf: 'center',
-          // bottom: 10,
-          // right: 0,
-          margin: 10,
-          marginBottom: 20
-        }}
-      />
-      <Button
-        _theme="pink"
-        onPress={() => checkCart(dataStore)}
-        title="Masukkan Keranjang"
-        styleWrapper={{
-          width: '70%',
-          alignSelf: 'center',
-          // bottom: 10,
-          // right: 0,
-          margin: 10,
-          marginBottom: 20
-        }}
-      />
+        <Button
+          _theme="pink"
+          onPress={() => checkCart(dataStore)}
+          title="Chat"
+          styleWrapper={{
+            width: '20%',
+            alignSelf: 'center',
+            // bottom: 10,
+            // right: 0,
+            margin: 10,
+            marginBottom: 20,
+          }}
+        />
+        <Button
+          _theme="pink"
+          onPress={() => checkCart(dataStore)}
+          title="Masukkan Keranjang"
+          styleWrapper={{
+            width: '70%',
+            alignSelf: 'center',
+            // bottom: 10,
+            // right: 0,
+            margin: 10,
+            marginBottom: 20,
+          }}
+        />
       </View>
     </View>
   );
@@ -469,4 +544,13 @@ const styles = StyleSheet.create({
     borderBottomColor: theme.colors.grey6,
     marginVertical: 10,
   },
+  commentCard: {
+    height: 200,
+    width: '100%',
+    borderWidth: 1,
+    borderColor: theme.colors.grey7,
+    marginTop: 20,
+    borderRadius: 10,
+    padding: 10
+  }
 });

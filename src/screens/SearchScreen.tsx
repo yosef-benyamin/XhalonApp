@@ -112,8 +112,8 @@ const SearchScreen = () => {
 
   const renderItem: ListRenderItem<any> = useCallback(
     ({item}: {item: IStore}) => (
-      <View style={{flex: 1 / 2, marginHorizontal: 3}}>
-        {<SalonCard item={item} distance={_getDistance(item)} />}
+      <View style={{marginHorizontal: 3}}>
+        {<SalonCard item={item}/>}
       </View>
     ),
     [],
@@ -163,10 +163,11 @@ const SearchScreen = () => {
         <FlatList
           data={[...(salon || [])]}
           renderItem={renderItem}
-          numColumns={2}
+          // numColumns={2}
           keyExtractor={(_item, index) => `${index}`}
           contentContainerStyle={{
             padding: 2,
+            alignItems: 'center'
           }}
           ListFooterComponent={() => <View style={{marginBottom: 170}} />}
           ListEmptyComponent={() => (

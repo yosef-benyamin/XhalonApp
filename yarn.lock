@@ -2424,6 +2424,7 @@ __metadata:
     react-native: 0.70.6
     react-native-device-info: ^10.6.0
     react-native-dotenv: ^3.4.7
+    react-native-drawer-layout: ^3.2.1
     react-native-gesture-handler: ^2.9.0
     react-native-get-location: ^3.0.1
     react-native-image-picker: ^5.0.1
@@ -8541,6 +8542,20 @@ __metadata:
     "@babel/core": ^7.20.5
     "@babel/runtime": ^7.20.6
   checksum: 87148432ef19305053813bdda96e6bc7fa08c3dd21a0983f0a636981b278f14ea26eb6ab5c7fdbdab60b00848dca9a49e7030b267578e3f8b18bc79c89245752
+  languageName: node
+  linkType: hard
+
+"react-native-drawer-layout@npm:^3.2.1":
+  version: 3.2.1
+  resolution: "react-native-drawer-layout@npm:3.2.1"
+  dependencies:
+    use-latest-callback: ^0.1.5
+  peerDependencies:
+    react: "*"
+    react-native: "*"
+    react-native-gesture-handler: ">= 1.0.0"
+    react-native-reanimated: ">= 1.0.0"
+  checksum: 2644175b2fc9fee33a2ff98802007721b1974e8b338b6932a8df8964741474a8549366f63130dce817ae8fe91055c7216314b717c9bf7ec7e78321f3fb50dd0f
   languageName: node
   linkType: hard
 

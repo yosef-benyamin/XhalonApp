@@ -93,14 +93,14 @@ const CartListScreen = () => {
             </Text>
           </TouchableOpacity>
         ),
-        trailing: (
-          <TouchableOpacity style={{marginRight: 16}}>
-            <Image
-              source={ic_chat}
-              style={[iconSize, {tintColor: theme.colors.low_pink}]}
-            />
-          </TouchableOpacity>
-        ),
+        // trailing: (
+        //   <TouchableOpacity style={{marginRight: 16}}>
+        //     <Image
+        //       source={ic_chat}
+        //       style={[iconSize, {tintColor: theme.colors.low_pink}]}
+        //     />
+        //   </TouchableOpacity>
+        // ),
       }),
     );
   }, [navigation]);
