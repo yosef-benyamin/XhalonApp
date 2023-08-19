@@ -1,4 +1,4 @@
-import {Image, StyleSheet, Text, View} from 'react-native';
+import {Image, Linking, StyleSheet, Text, TouchableOpacity, View} from 'react-native';
 import React from 'react';
 // import {img_japanese, img_user} from 'assets/images';
 import {
@@ -92,10 +92,12 @@ const Drawer = () => {
 
       <View style={[rowCenter, styles.bottom]}>
         {/* <Image source={ic_wa} style={iconSize} /> */}
-        <View style={{marginLeft: 10}}>
+        <TouchableOpacity
+          style={{ marginLeft: 10 }}
+          onPress={() => Linking.openURL('whatsapp://send?text=Halo CS&phone=+6282273321797')}>
           <Text>Whatsapp CS XHALONA</Text>
-          <Text style={h1}>081111111111</Text>
-        </View>
+          <Text style={h1}>+6282273321797</Text>
+        </TouchableOpacity>
       </View>
     </View>
   );
