@@ -34,6 +34,9 @@ import PaymentScreen from 'screens/PaymentScreen';
 import SearchScreen from 'screens/SearchScreen';
 import TransactionDetailScreen from 'screens/TransactionDetailScreen';
 import OrderStatusScreen from 'screens/OrderStatusScreen';
+import ProfileScreen from 'screens/ProfileScreen';
+import ProfileDetailScreen from 'screens/ProfileDetailScreen';
+import AccountScreen from 'screens/AccountScreen';
 
 const RootStack = createStackNavigator<RootStackParamList>();
 
@@ -111,6 +114,9 @@ const MainStack: React.FC = () => {
                 <RootStack.Screen name="Search" component={SearchScreen} />
                 <RootStack.Screen name="TransactionDetail" component={TransactionDetailScreen} />
                 <RootStack.Screen name="OrderStatus" component={OrderStatusScreen} />
+                <RootStack.Screen name="Profile" component={ProfileScreen} />
+                <RootStack.Screen name="ProfileDetail" component={ProfileDetailScreen} />
+                <RootStack.Screen name="Account" component={AccountScreen} />
               </>
             )}
           </>

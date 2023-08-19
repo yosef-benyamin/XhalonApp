@@ -11,6 +11,9 @@ type RootStackParamList = {
   RegisterPassword: undefined;
   ForgotPassword: undefined;
   ResetPassword: undefined;
+  Profile: undefined;
+  ProfileDetail: undefined;
+  Account: undefined;
   OrderStatus: {
     SALES_ID: string;
   };

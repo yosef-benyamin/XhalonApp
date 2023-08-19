@@ -12,6 +12,7 @@ import {h1, h4, h5} from 'utils/styles';
 import { useAuthStore } from 'store/actions/AuthStore';
 import { AuthState } from 'types/auth.types';
 import { useDrawerStore } from 'store/effects/drawerStore';
+import { useNavigation } from '@react-navigation/native';
 // import {ic_wa} from 'assets/icons';
 
 const MENU_DRAWERS = [
@@ -45,11 +46,15 @@ const Drawer = () => {
     (state: any) => state,
   ) as AuthState;
   const openDrawer = useDrawerStore() as any;
+  const navigation = useNavigation();
 
   const actionPress=async(name:string)=>{
     if(name === 'Keluar') {
-      auth.logout(auth.user?.USER_ID!, auth.user?.SESSION_LOGIN_INFO[0]?.SESSION_LOGIN_ID!);
+      // auth.logout(auth.user?.USER_ID!, auth.user?.SESSION_LOGIN_INFO[0]?.SESSION_LOGIN_ID!);
       openDrawer.toggleDrawer({isShowDrawer: !openDrawer.isShowDrawer})
+    } else if (name === 'profile') {
+      openDrawer.toggleDrawer({isShowDrawer: !openDrawer.isShowDrawer});
+      navigation.navigate('Profile');
     }
   }
 
@@ -64,7 +69,9 @@ const Drawer = () => {
         {/* <Image source={img_user} style={styles.imgUser} /> */}
         <View style={{marginLeft: 20}}>
           <Text style={[h1, {marginBottom: 10}]}>Riko Saputra</Text>
-          <Text style={h5}>Lihat Profile</Text>
+          <Text style={h5} onPress={() => actionPress('profile')}>
+            Lihat Profile
+          </Text>
         </View>
       </View>
       <View style={{marginTop: WINDOW_HEIGHT / 3, marginLeft: 50}}>
